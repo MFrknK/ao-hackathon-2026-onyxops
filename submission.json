@@ -30,31 +30,32 @@
     "total_alarms": 3000,
     "alarms_processed": 3000,
     "sampling_used": false,
-    "incident_cards": 6,
+    "incident_cards": 5,
     "cards_with_root_cause": 5,
     "cap": 15,
     "incidents_detected": 11,
-    "noise_alarms": 1337,
-    "noise_ratio": 0.446,
-    "signal_alarms": 1663,
+    "noise_alarms": 2295,
+    "noise_ratio": 0.765,
+    "signal_alarms": 705,
     "temporal_clusters": 56,
     "cluster_kinds": {
       "burst": 25,
       "slow_burn": 31
     },
-    "reduction_ratio": "3000 -> 6",
-    "reduction_factor": 500.0,
+    "reduction_ratio": "3000 -> 5",
+    "reduction_factor": 600.0,
     "runtime_seconds": 0.11,
     "data_integrity": {
-      "alarms_in_cards": 1663,
-      "alarms_in_noise_ledger": 1337,
+      "alarms_in_cards": 705,
+      "alarms_in_noise_ledger": 2295,
       "accounted_total": 3000,
       "no_data_loss": true,
       "all_alarm_ids_unique": true
     },
     "deterministic": true,
     "pattern_matches": 5,
-    "known_pattern_library_size": 6
+    "known_pattern_library_size": 6,
+    "unclassified_alarms": 0
   },
   "incidents": [
     {
@@ -149,5 +150,6 @@
     "demo/09-topoloji.png",
     "demo/10-boru-hatti-butunluk.png"
   ],
-  "status": "final"
+  "status": "final",
+  "deploy_url": null
 }

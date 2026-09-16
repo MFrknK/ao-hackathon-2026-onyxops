@@ -149,6 +149,18 @@ SLOW_BURN_MIN_SEVERITY = 3
 # Bir burst kumesinin gecerli sayilmasi icin gereken minimum alarm sayisi.
 BURST_MIN_ALARMS = 3
 
+# Bir kumeye katilabilmek icin gereken minimum siddet.
+#
+# Artis penceresi icinde kalan her alarm o olaya ait degildir; servis zaten
+# surekli arka plan uretiyor ve patlama aninda bu akis da devam ediyor.
+# Olayin *kendi* kayitlari ise siddetlidir. Bu esik, pencereye denk gelmis
+# dusuk siddetli arka plani olay kartindan ayirir — kart "532 alarm" derken
+# bunlarin gercekten olaya ait olmasini saglar.
+#
+# Esigin altinda kalanlar silinmez: `background_in_window` gerekcesiyle
+# Gurultu Defteri'ne yazilir ve denetim ekranindan incelenebilir.
+CLUSTER_MIN_SEVERITY = 4
+
 # --------------------------------------------------------------------------
 # Faz 3 — Topolojik birlestirme
 # --------------------------------------------------------------------------
@@ -264,6 +276,11 @@ CRITICALITY_WEIGHT = {
 CARD_QUALITY_MIN_SERVICES = 2       # birden fazla servise yayilmis mi
 CARD_QUALITY_MIN_SEVERITY = 5       # kritik siddet tasiyor mu
 CARD_QUALITY_MIN_TYPE_PRIOR = 0.5   # kok nedeni gercek bir "neden" tipi mi
+
+# Kendi kartini alan bir olay en az bu kadar alarm tasimali. Alti alarmlik ve
+# kok nedeni saf semptom (`timeout`, prior 0.10) olan bir "olay", nobetci
+# muhendise gosterecek bir sey sunmaz; panoyu sulandirir.
+CARD_QUALITY_MIN_ALARMS = 10
 
 PRIORITY_WEIGHTS = {
     "severity": 0.40,   # Ortalama/maksimum siddet

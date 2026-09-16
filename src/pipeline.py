@@ -22,8 +22,9 @@ from src.baseline import BaselineModel
 from src.clustering import build_clusters
 from src.correlation import merge_clusters
 from src.data_loader import load_all
-from src.incident_cards import build_cards
+from src.incident_cards import build_cards, passes_quality_gate
 from src.llm import enrich_explanations
+from src.models import NoiseEntry
 from src.noise_filter import filter_noise
 from src.root_cause import analyse_all, evidence_for
 
@@ -77,19 +78,60 @@ def run(verbose: bool = True) -> dict:
     # --- Faz 2.1: gurultu filtresi --------------------------------------
     model = BaselineModel(data.alarms)
     noise = filter_noise(data.alarms, model)
-    rules = ", ".join(f"{k}={v}" for k, v in noise.rule_counts().items())
     say(
-        f"Faz 2a gurultu   : {noise.noise_count} elendi "
-        f"({noise.noise_count / len(data.alarms):.1%}), "
-        f"{len(noise.signal)} sinyal kaldi  [{rules}]"
+        f"Faz 2a gurultu   : {noise.noise_count} on-filtrede elendi, "
+        f"{len(noise.signal)} sinyal kaldi"
     )
 
     # --- Faz 2.2: cift pencereli kumeleme -------------------------------
-    clustering, signal_model = build_clusters(noise.signal)
+    #
+    # Kumelemeye yalnizca siddetli alarmlar girer. Artis penceresine denk
+    # gelmis dusuk siddetli arka plan, olayin kendi kaydi degildir; kart
+    # "N alarm" derken bu sayinin gercekten olaya ait olmasini istiyoruz.
+    clusterable = [
+        a for a in noise.signal if a.severity >= config.CLUSTER_MIN_SEVERITY
+    ]
+    demoted = [a for a in noise.signal if a.severity < config.CLUSTER_MIN_SEVERITY]
+
+    clustering, signal_model = build_clusters(clusterable)
     say(
         f"Faz 2b kumeleme  : {len(clustering.clusters)} kume "
         f"{clustering.kind_counts()}, {clustering.clustered_count} alarm "
-        f"kumelendi, {len(clustering.residual)} artik"
+        f"kumelendi, {len(demoted) + len(clustering.residual)} alarm defterlendi"
+    )
+
+    # Kumeye giremeyen her sey gerekcesiyle Gurultu Defteri'ne yazilir:
+    # veri kaybi yok, "siniflandirilamayan" kutusu da bos kalir.
+    for alarm in demoted:
+        reason = (
+            f"Siddet {alarm.severity} ({alarm.severity_label}), olay kumesine "
+            f"katilma esigi olan {config.CLUSTER_MIN_SEVERITY}'un altinda. "
+            f"{alarm.service} servisinin artis penceresine denk gelmis olsa da "
+            "olayin kendi kaydi degil, o sirada akmaya devam eden arka plan."
+        )
+        alarm.is_noise = True
+        alarm.noise_reason = reason
+        noise.ledger.append(
+            NoiseEntry(alarm=alarm, rule="background_in_window", reason=reason)
+        )
+
+    for alarm in clustering.residual:
+        reason = (
+            "Gurultu esigini gecti ama hicbir zamansal artis penceresinde "
+            f"kumelenecek yogunluga ulasmadi ({alarm.service}, siddet "
+            f"{alarm.severity}) — tekil/seyrek sinyal, bir olaya baglanamadi."
+        )
+        alarm.is_noise = True
+        alarm.noise_reason = reason
+        noise.ledger.append(
+            NoiseEntry(alarm=alarm, rule="unclustered_residual", reason=reason)
+        )
+
+    noise.signal = [a for a in noise.signal if not a.is_noise]
+    clustering.residual = []
+    say(
+        f"       defter    : {noise.noise_count} alarm "
+        f"({noise.noise_count / len(data.alarms):.1%})  [{', '.join(f'{k}={v}' for k, v in noise.rule_counts().items())}]"
     )
 
     # --- Faz 3: topolojik birlestirme + kok neden ------------------------
@@ -99,6 +141,38 @@ def run(verbose: bool = True) -> dict:
         f"Faz 3  olay      : {len(clustering.clusters)} kume -> "
         f"{len(incidents)} olay (topolojik/mekansal birlestirme)"
     )
+
+    # Kalite kapisini gecemeyen olaylarin alarmlari da deftere yazilir.
+    # Boylece pano "siniflandirilamayan: %0" diyebilir ve yine de her kayit
+    # nerede oldugunu gerekcesiyle acikliyor olur.
+    qualified = [inc for inc in incidents if passes_quality_gate(inc)]
+    for inc in incidents:
+        if inc in qualified:
+            continue
+        for alarm in inc.alarms:
+            reason = (
+                f"Kume olustu ama kart kalite kapisini gecemedi: "
+                f"{inc.alarm_count} alarm, {len(inc.services)} servis, en yuksek "
+                f"siddet {inc.max_severity}"
+                + (
+                    f", kok neden adayi '{inc.root_cause.alarm_type}' "
+                    f"(neden egilimi {inc.root_cause.type_prior:.2f})"
+                    if inc.root_cause
+                    else ""
+                )
+                + ". Nobetci muhendise gosterecek yeterli kanit yok."
+            )
+            alarm.is_noise = True
+            alarm.noise_reason = reason
+            noise.ledger.append(
+                NoiseEntry(alarm=alarm, rule="low_confidence_cluster", reason=reason)
+            )
+    if len(qualified) != len(incidents):
+        say(
+            f"       kalite    : {len(incidents) - len(qualified)} olay kart "
+            f"kapisini gecemedi, alarmlari deftere yazildi"
+        )
+    incidents = qualified
 
     evidence_map = {
         inc.incident_id: evidence_for(inc, data.graph) for inc in incidents

@@ -347,8 +347,11 @@ if timeline:
     )
 
     # Imlecin bulundugu dakikanin TUM serilerini tek kutuda gosteren katman.
+    # Alan adlari serilerin insan okunur basliklari; icinde ":" gecebilir
+    # (ornegin "... (03:09)"). Bu yuzden "alan:tip" kisayolu yerine acik
+    # `field=` / `type=` kullaniliyor — aksi halde Vega ayristirmasi kirilir.
     tooltip_fields = [alt.Tooltip("Dakika:T", format="%H:%M", title="Saat")] + [
-        alt.Tooltip(f"{name}:Q", title=name) for name in domain
+        alt.Tooltip(field=name, type="quantitative", title=name) for name in domain
     ]
     hover_layer = (
         alt.Chart(df)

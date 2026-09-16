@@ -331,8 +331,8 @@ def build_unclustered_card(
 
     reasons: list[str] = []
     if overflow:
-        capped = [i for i in overflow if _passes_quality_gate(i)]
-        weak = [i for i in overflow if not _passes_quality_gate(i)]
+        capped = [i for i in overflow if passes_quality_gate(i)]
+        weak = [i for i in overflow if not passes_quality_gate(i)]
         if capped:
             reasons.append(
                 f"{len(capped)} olay, oncelik siralamasinda ilk "
@@ -429,8 +429,10 @@ def build_unclustered_card(
 # --------------------------------------------------------------------------
 
 
-def _passes_quality_gate(incident: Incident) -> bool:
+def passes_quality_gate(incident: Incident) -> bool:
     """Olay kendi kartini hak ediyor mu? (bkz. config.CARD_QUALITY_*)"""
+    if incident.alarm_count < config.CARD_QUALITY_MIN_ALARMS:
+        return False
     if len(incident.services) >= config.CARD_QUALITY_MIN_SERVICES:
         return True
     if incident.max_severity >= config.CARD_QUALITY_MIN_SEVERITY:
@@ -452,8 +454,8 @@ def build_cards(
     ranked = rank_incidents(incidents)
 
     # 1) Kalite kapisi — kanitsiz olaylar kendi kartini almaz.
-    qualified = [inc for inc in ranked if _passes_quality_gate(inc)]
-    rejected = [inc for inc in ranked if not _passes_quality_gate(inc)]
+    qualified = [inc for inc in ranked if passes_quality_gate(inc)]
+    rejected = [inc for inc in ranked if not passes_quality_gate(inc)]
 
     # 2) Artik alarm veya elenen olay varsa toplayici kart zorunlu.
     needs_bucket = (
@@ -480,6 +482,15 @@ def build_cards(
         build_card(inc, graph, generated_at, similar.get(inc.incident_id))
         for inc in kept
     ]
+
+    # Ayni servisin ayni tip arizasi iki ayri pencerede yasanmis olabilir
+    # (ornegin havuz once 03:09'da, sonra 03:24'te tukenir). Kartlar panoda
+    # birbirinden ayirt edilebilsin diye basliga baslangic saati eklenir.
+    seen: Counter = Counter(card["display_title"] for card in cards)
+    for card in cards:
+        if seen[card["display_title"]] > 1:
+            start = card["time_range"]["start"][11:16]
+            card["display_title"] = f"{card['display_title']} ({start})"
 
     bucket = build_unclustered_card(overflow, residual, generated_at)
     if bucket is not None:
