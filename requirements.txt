@@ -7,3 +7,9 @@ streamlit>=1.30
 # Opsiyonel: kok neden aciklamalarinin LLM ile zenginlestirilmesi.
 # Kurulu degilse veya ANTHROPIC_API_KEY bos ise sablon motoru devreye girer.
 anthropic>=0.40 ; python_version >= "3.9"
+
+# Yalnizca demo ekran goruntulerini yeniden uretmek icin gerekir; urun
+# calismasi icin degil. Kullanmak isterseniz:
+#     python -m pip install playwright && python -m playwright install chromium
+#     python -m src.capture_demo
+# playwright>=1.40

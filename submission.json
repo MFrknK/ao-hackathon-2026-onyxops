@@ -3,31 +3,146 @@
   "scenario": "S-A1 — Alarm Firtinasi",
   "team": "OnyxOps",
   "project": "OnyxOps — Alarm Firtinasi Korelasyon Motoru",
-  "repository": "",
-  "summary": "3.000 alarmi gurultu filtresi, cift pencereli zamansal kumeleme ve servis bagimlilik topolojisi ile en fazla 15 olay kartina indirger; her kart kok neden hipotezi, kaniti, karsi hipotezi ve izlenebilir aksiyonu icerir.",
+  "repository": "https://github.com/MFrknK/ao-hackathon-2026-onyxops",
+  "summary": "3.000 alarmi servis bazli taban orani olcumu, cift duyarlikli artis dedektoru ve bagimlilik topolojisi uzerinden 6 olay kartina indirger (ust sinir 15). Her kart kok neden hipotezi, 5 bilesenli puan kirilimi, veriden turetilmis kanitlar, karsi hipotez ve sahip/durum bilgisi tasiyan izlenebilir bir aksiyon icerir. Elenen 1.337 alarmin tamami gerekceli olarak Gurultu Defteri'nde denetlenebilir; veri kaybi sifirdir.",
   "entrypoints": {
     "verify": "python -m src.verify_setup",
     "pipeline": "python -m src.pipeline",
-    "ui": "streamlit run src/app.py"
+    "ui": "streamlit run src/app.py",
+    "screenshots": "python -m src.capture_demo"
   },
   "outputs": {
     "incidents": "output/incidents.json",
     "noise_ledger": "output/noise_ledger.json",
-    "action_log": "output/action_log.json"
+    "action_log": "output/action_log.json",
+    "topology": "output/topology.json"
   },
   "docs": {
     "plan": "docs/plan.md",
     "phases": "docs/fazlar.md",
     "architecture": "docs/mimari.md",
-    "ai_jury": "AI_JURI.md"
+    "ai_jury": "AI_JURI.md",
+    "ai_config": "CLAUDE.md",
+    "prompts": "prompts/root_cause_explanation.md"
   },
   "results": {
-    "total_alarms": null,
-    "incident_cards": null,
-    "noise_alarms": null,
-    "reduction_ratio": null
+    "total_alarms": 3000,
+    "alarms_processed": 3000,
+    "sampling_used": false,
+    "incident_cards": 6,
+    "cards_with_root_cause": 5,
+    "cap": 15,
+    "incidents_detected": 11,
+    "noise_alarms": 1337,
+    "noise_ratio": 0.446,
+    "signal_alarms": 1663,
+    "temporal_clusters": 56,
+    "cluster_kinds": {
+      "burst": 25,
+      "slow_burn": 31
+    },
+    "reduction_ratio": "3000 -> 6",
+    "reduction_factor": 500.0,
+    "runtime_seconds": 0.11,
+    "data_integrity": {
+      "alarms_in_cards": 1663,
+      "alarms_in_noise_ledger": 1337,
+      "accounted_total": 3000,
+      "no_data_loss": true,
+      "all_alarm_ids_unique": true
+    },
+    "deterministic": true
   },
-  "ai_tools": [],
+  "incidents": [
+    {
+      "incident_id": "INC-001",
+      "root_cause": "dns-resolver / network_down",
+      "alarm_count": 543,
+      "affected_services": 14,
+      "confidence": 0.789
+    },
+    {
+      "incident_id": "INC-002",
+      "root_cause": "billing-db / disk_full",
+      "alarm_count": 321,
+      "affected_services": 7,
+      "confidence": 0.799
+    },
+    {
+      "incident_id": "INC-003",
+      "root_cause": "session-service / oom_risk",
+      "alarm_count": 330,
+      "affected_services": 6,
+      "confidence": 0.763
+    },
+    {
+      "incident_id": "INC-004",
+      "root_cause": "subscriber-db / db_conn_pool",
+      "alarm_count": 124,
+      "affected_services": 3,
+      "confidence": 0.73
+    },
+    {
+      "incident_id": "INC-005",
+      "root_cause": "session-service / gc_pressure",
+      "alarm_count": 18,
+      "affected_services": 1,
+      "confidence": 0.762
+    },
+    {
+      "incident_id": "INC-UNCLUSTERED",
+      "root_cause": null,
+      "alarm_count": 327,
+      "affected_services": 23,
+      "confidence": 0.0
+    }
+  ],
+  "requirements_met": {
+    "tum_alarm_akisi_islendi": true,
+    "en_fazla_15_olay_karti": true,
+    "kok_neden_etkilenen_servis_alarm_sayisi_zaman_araligi": true,
+    "aksiyon_sahip_ve_durum_ile_kayitli": true,
+    "aksiyon_acilip_kapanana_kadar_izlenebiliyor": true
+  },
+  "x_factor": {
+    "dogal_dil_kok_neden_aciklamasi": true,
+    "karsi_hipotez": true,
+    "gurultu_denetim_gorunumu": true,
+    "denetlenebilir_veri_butunlugu": true,
+    "olcume_dayali_parametre_kalibrasyonu": true
+  },
+  "ai_tools": [
+    {
+      "name": "Claude Code",
+      "model": "Opus 5 (1M context)",
+      "usage": "Tum gelistirme, veri kesfi, parametre kalibrasyonu, hata ayiklama"
+    },
+    {
+      "name": "Anthropic API",
+      "model": "claude-sonnet-5",
+      "usage": "Opsiyonel kok neden aciklama zenginlestirmesi; varsayilan kapali, teslim ciktilari deterministik sablon motoruyla uretildi",
+      "optional": true,
+      "enabled_in_submission": false
+    }
+  ],
   "mcp_servers": [],
-  "status": "draft — Faz 6'da tamamlanacak"
+  "libraries": [
+    "pandas",
+    "streamlit",
+    "anthropic (opsiyonel)",
+    "playwright (yalnizca demo ekran goruntuleri)"
+  ],
+  "screenshots": [
+    "demo/01-olay-panosu.png",
+    "demo/02-kok-neden-kanit.png",
+    "demo/03-karsi-hipotez-aksiyon.png",
+    "demo/04-aksiyon-durum-degisti.png",
+    "demo/05-gurultu-denetimi.png",
+    "demo/06-gurultu-defteri-tablo.png",
+    "demo/07-aksiyon-takibi.png",
+    "demo/08-durum-gecis-gunlugu.png",
+    "demo/09-topoloji.png",
+    "demo/10-boru-hatti-butunluk.png"
+  ],
+  "status": "final"
 }

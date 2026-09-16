@@ -1,7 +1,7 @@
 {
   "summary": {
-    "generated_at": "2026-09-16T16:07:30.172217",
-    "runtime_seconds": 0.11,
+    "generated_at": "2026-09-16T16:23:09.769474",
+    "runtime_seconds": 0.08,
     "total_alarms": 3000,
     "noise_alarms": 1337,
     "signal_alarms": 1663,
@@ -716,12 +716,12 @@
         "action": "ao-045-dns / dns-resolver: Arayuzun fiziksel baglantisini ve switch port durumunu kontrol edin; gerekirse yedek hatta gecin. (Etki: 14 servis, 543 alarm.)",
         "owner": "network-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1200,12 +1200,12 @@
         "action": "ao-035-billing / billing-db: Diski acil bosaltin (log/temp temizligi), ardindan kalici kapasite artisi planlayin. (Etki: 7 servis, 321 alarm.)",
         "owner": "storage-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1674,12 +1674,12 @@
         "action": "ao-014-session / session-service: Servisi kontrollu yeniden baslatin ve heap/bellek profilini alarak sizinti kaynagini bulun. (Etki: 6 servis, 330 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1924,12 +1924,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 3 servis, 124 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2051,12 +2051,12 @@
         "action": "ao-013-session / session-service: GC duraklamalarini analiz edin, heap boyutu ve GC parametrelerini gozden gecirin. (Etki: 1 servis, 18 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2539,12 +2539,12 @@
         "action": "Dusuk oncelikli artik sinyalleri toplu olarak gozden gecirin; tekrar eden bir oruntu varsa esikleri yeniden ayarlayin.",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:07:30.172217",
-        "updated_at": "2026-09-16T16:07:30.172217",
+        "created_at": "2026-09-16T16:23:09.769474",
+        "updated_at": "2026-09-16T16:23:09.769474",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:07:30.172217",
+            "at": "2026-09-16T16:23:09.769474",
             "note": "Toplayici kart otomatik olarak acildi."
           }
         ]
