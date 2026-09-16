@@ -1,0 +1,33 @@
+{
+  "hackathon": "AO Hackathon 2026",
+  "scenario": "S-A1 — Alarm Firtinasi",
+  "team": "OnyxOps",
+  "project": "OnyxOps — Alarm Firtinasi Korelasyon Motoru",
+  "repository": "",
+  "summary": "3.000 alarmi gurultu filtresi, cift pencereli zamansal kumeleme ve servis bagimlilik topolojisi ile en fazla 15 olay kartina indirger; her kart kok neden hipotezi, kaniti, karsi hipotezi ve izlenebilir aksiyonu icerir.",
+  "entrypoints": {
+    "verify": "python -m src.verify_setup",
+    "pipeline": "python -m src.pipeline",
+    "ui": "streamlit run src/app.py"
+  },
+  "outputs": {
+    "incidents": "output/incidents.json",
+    "noise_ledger": "output/noise_ledger.json",
+    "action_log": "output/action_log.json"
+  },
+  "docs": {
+    "plan": "docs/plan.md",
+    "phases": "docs/fazlar.md",
+    "architecture": "docs/mimari.md",
+    "ai_jury": "AI_JURI.md"
+  },
+  "results": {
+    "total_alarms": null,
+    "incident_cards": null,
+    "noise_alarms": null,
+    "reduction_ratio": null
+  },
+  "ai_tools": [],
+  "mcp_servers": [],
+  "status": "draft — Faz 6'da tamamlanacak"
+}

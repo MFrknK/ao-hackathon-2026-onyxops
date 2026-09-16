@@ -1,0 +1,9 @@
+# OnyxOps — calisma zamani bagimliliklari
+# Kurulum:  python -m pip install -r requirements.txt
+
+pandas>=2.0
+streamlit>=1.30
+
+# Opsiyonel: kok neden aciklamalarinin LLM ile zenginlestirilmesi.
+# Kurulu degilse veya ANTHROPIC_API_KEY bos ise sablon motoru devreye girer.
+anthropic>=0.40 ; python_version >= "3.9"
