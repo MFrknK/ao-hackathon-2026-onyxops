@@ -1,7 +1,7 @@
 {
   "summary": {
-    "generated_at": "2026-09-16T17:25:11.706768",
-    "runtime_seconds": 0.08,
+    "generated_at": "2026-09-16T19:00:46.518023",
+    "runtime_seconds": 0.1,
     "total_alarms": 3000,
     "noise_alarms": 2295,
     "signal_alarms": 711,
@@ -1173,12 +1173,12 @@
         "action": "ao-033-subscriber / subscriber-db: Yol boyunca paket kaybi olcumu yapin; rack ustu switch ve uplink sayaclarini inceleyin. (Etki: 10 servis, 209 alarm.)",
         "owner": "network-oncall",
         "status": "open",
-        "created_at": "2026-09-16T17:25:11.706768",
-        "updated_at": "2026-09-16T17:25:11.706768",
+        "created_at": "2026-09-16T19:00:46.518023",
+        "updated_at": "2026-09-16T19:00:46.518023",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T17:25:11.706768",
+            "at": "2026-09-16T19:00:46.518023",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1234,8 +1234,24 @@
             "typical_resolution": "Yedek hatta gecis ile 5-15 dk, fiziksel onarim ile 1-4 saat."
           }
         ],
-        "similar_incidents": [],
-        "history_runs_compared": 0
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-001",
+            "run_id": "2026-09-16T17:25:11",
+            "occurred_at": "2026-09-10T01:42:13",
+            "similarity": 1.0,
+            "root_cause": "subscriber-db/pkt_loss",
+            "alarm_count": 209,
+            "why": [
+              "ayni kok neden tipi (`pkt_loss`)",
+              "10 ortak servis (api-gateway, auth-service, charging-service, dns-resolver...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
       }
     },
     {
@@ -1542,12 +1558,12 @@
         "action": "ao-035-billing / billing-db: Diski acil bosaltin (log/temp temizligi), ardindan kalici kapasite artisi planlayin. (Etki: 6 servis, 193 alarm.)",
         "owner": "storage-oncall",
         "status": "open",
-        "created_at": "2026-09-16T17:25:11.706768",
-        "updated_at": "2026-09-16T17:25:11.706768",
+        "created_at": "2026-09-16T19:00:46.518023",
+        "updated_at": "2026-09-16T19:00:46.518023",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T17:25:11.706768",
+            "at": "2026-09-16T19:00:46.518023",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1595,8 +1611,24 @@
             "typical_resolution": "Acil bosaltma ile 10-30 dk; kalici cozum icin kapasite planlamasi."
           }
         ],
-        "similar_incidents": [],
-        "history_runs_compared": 0
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-002",
+            "run_id": "2026-09-16T17:25:11",
+            "occurred_at": "2026-09-10T02:05:06",
+            "similarity": 1.0,
+            "root_cause": "billing-db/disk_full",
+            "alarm_count": 193,
+            "why": [
+              "ayni kok neden tipi (`disk_full`)",
+              "6 ortak servis (billing-db, billing-service, charging-service, invoice-batch...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`billing-db`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
       }
     },
     {
@@ -1958,12 +1990,12 @@
         "action": "ao-053-payment / payment-provider-gw: Dis saglayici durumunu dogrulayin, devre kesiciyi (circuit breaker) devreye alin ve saglayiciyla iletisime gecin. (Etki: 4 servis, 254 alarm.)",
         "owner": "vendor-liaison",
         "status": "open",
-        "created_at": "2026-09-16T17:25:11.706768",
-        "updated_at": "2026-09-16T17:25:11.706768",
+        "created_at": "2026-09-16T19:00:46.518023",
+        "updated_at": "2026-09-16T19:00:46.518023",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T17:25:11.706768",
+            "at": "2026-09-16T19:00:46.518023",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2008,8 +2040,24 @@
             "typical_resolution": "Saglayiciya bagli; devre kesici ile kendi tarafimizdaki etki dakikalar icinde sinirlanir."
           }
         ],
-        "similar_incidents": [],
-        "history_runs_compared": 0
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T17:25:11",
+            "occurred_at": "2026-09-10T02:40:28",
+            "similarity": 1.0,
+            "root_cause": "payment-provider-gw/ext_unreach",
+            "alarm_count": 254,
+            "why": [
+              "ayni kok neden tipi (`ext_unreach`)",
+              "4 ortak servis (mobile-bff, order-service, payment-provider-gw, payment-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`payment-provider-gw`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
       }
     },
     {
@@ -2140,12 +2188,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 2 servis, 36 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T17:25:11.706768",
-        "updated_at": "2026-09-16T17:25:11.706768",
+        "created_at": "2026-09-16T19:00:46.518023",
+        "updated_at": "2026-09-16T19:00:46.518023",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T17:25:11.706768",
+            "at": "2026-09-16T19:00:46.518023",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2186,7 +2234,37 @@
         ],
         "similar_incidents": [
           {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-004",
+            "run_id": "2026-09-16T17:25:11",
+            "occurred_at": "2026-09-10T03:09:04",
+            "similarity": 1.0,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 36,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "2 ortak servis (subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          },
+          {
             "source": "ayni_calistirma",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T19:00:46",
+            "occurred_at": "2026-09-10T03:24:07",
+            "similarity": 0.919,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 13,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "2 ortak servis (subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 0.74)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          },
+          {
+            "source": "gecmis_arsiv",
             "incident_id": "INC-005",
             "run_id": "2026-09-16T17:25:11",
             "occurred_at": "2026-09-10T03:24:07",
@@ -2201,7 +2279,7 @@
             ]
           }
         ],
-        "history_runs_compared": 0
+        "history_runs_compared": 1
       }
     },
     {
@@ -2308,12 +2386,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 2 servis, 13 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T17:25:11.706768",
-        "updated_at": "2026-09-16T17:25:11.706768",
+        "created_at": "2026-09-16T19:00:46.518023",
+        "updated_at": "2026-09-16T19:00:46.518023",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T17:25:11.706768",
+            "at": "2026-09-16T19:00:46.518023",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2354,7 +2432,37 @@
         ],
         "similar_incidents": [
           {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T17:25:11",
+            "occurred_at": "2026-09-10T03:24:07",
+            "similarity": 1.0,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 13,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "2 ortak servis (subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          },
+          {
             "source": "ayni_calistirma",
+            "incident_id": "INC-004",
+            "run_id": "2026-09-16T19:00:46",
+            "occurred_at": "2026-09-10T03:09:04",
+            "similarity": 0.919,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 36,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "2 ortak servis (subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 0.74)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          },
+          {
+            "source": "gecmis_arsiv",
             "incident_id": "INC-004",
             "run_id": "2026-09-16T17:25:11",
             "occurred_at": "2026-09-10T03:09:04",
@@ -2369,7 +2477,7 @@
             ]
           }
         ],
-        "history_runs_compared": 0
+        "history_runs_compared": 1
       }
     }
   ]

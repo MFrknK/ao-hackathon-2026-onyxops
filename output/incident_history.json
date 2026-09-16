@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-09-16T17:25:11",
-  "runs": 1,
+  "updated_at": "2026-09-16T19:00:46",
+  "runs": 2,
   "signatures": [
     {
       "incident_id": "INC-001",
@@ -154,6 +154,184 @@
     {
       "incident_id": "INC-005",
       "run_id": "2026-09-16T17:25:11",
+      "occurred_at": "2026-09-10T03:24:07",
+      "root_type": "db_conn_pool",
+      "root_service": "subscriber-db",
+      "services": [
+        "subscriber-db",
+        "subscriber-service"
+      ],
+      "locations": [
+        "dc1/rack-A",
+        "dc1/rack-B",
+        "dc1/rack-C",
+        "dc2/rack-C"
+      ],
+      "type_histogram": {
+        "db_conn_pool": 0.5385,
+        "cpu_high": 0.3846,
+        "latency_high": 0.0769
+      },
+      "max_severity": 4,
+      "alarm_count": 13,
+      "duration_minutes": 6.0,
+      "window_kinds": [
+        "burst",
+        "slow_burn"
+      ]
+    },
+    {
+      "incident_id": "INC-001",
+      "run_id": "2026-09-16T19:00:46",
+      "occurred_at": "2026-09-10T01:42:13",
+      "root_type": "pkt_loss",
+      "root_service": "subscriber-db",
+      "services": [
+        "api-gateway",
+        "auth-service",
+        "charging-service",
+        "dns-resolver",
+        "message-queue",
+        "mobile-bff",
+        "order-service",
+        "report-batch",
+        "subscriber-db",
+        "subscriber-service"
+      ],
+      "locations": [
+        "dc1/rack-A",
+        "dc1/rack-B",
+        "dc1/rack-C",
+        "dc2/rack-A",
+        "dc2/rack-B",
+        "dc2/rack-C"
+      ],
+      "type_histogram": {
+        "latency_high": 0.201,
+        "http_5xx": 0.177,
+        "timeout": 0.1627,
+        "pkt_loss": 0.1053,
+        "network_flap": 0.1053,
+        "conn_refused": 0.0957,
+        "thread_pool": 0.0957,
+        "network_down": 0.0574
+      },
+      "max_severity": 5,
+      "alarm_count": 209,
+      "duration_minutes": 10.5,
+      "window_kinds": [
+        "burst",
+        "slow_burn"
+      ]
+    },
+    {
+      "incident_id": "INC-002",
+      "run_id": "2026-09-16T19:00:46",
+      "occurred_at": "2026-09-10T02:05:06",
+      "root_type": "disk_full",
+      "root_service": "billing-db",
+      "services": [
+        "billing-db",
+        "billing-service",
+        "charging-service",
+        "invoice-batch",
+        "order-service",
+        "payment-service"
+      ],
+      "locations": [
+        "dc1/rack-A",
+        "dc1/rack-B",
+        "dc1/rack-C",
+        "dc2/rack-A",
+        "dc2/rack-B",
+        "dc2/rack-C"
+      ],
+      "type_histogram": {
+        "txn_fail": 0.2332,
+        "db_write_fail": 0.1762,
+        "http_5xx": 0.1606,
+        "latency_high": 0.1347,
+        "db_conn_pool": 0.1244,
+        "disk_full": 0.0881,
+        "timeout": 0.0829
+      },
+      "max_severity": 5,
+      "alarm_count": 193,
+      "duration_minutes": 22.4,
+      "window_kinds": [
+        "burst",
+        "slow_burn"
+      ]
+    },
+    {
+      "incident_id": "INC-003",
+      "run_id": "2026-09-16T19:00:46",
+      "occurred_at": "2026-09-10T02:40:28",
+      "root_type": "ext_unreach",
+      "root_service": "payment-provider-gw",
+      "services": [
+        "mobile-bff",
+        "order-service",
+        "payment-provider-gw",
+        "payment-service"
+      ],
+      "locations": [
+        "dc1/rack-A",
+        "dc1/rack-B",
+        "dc1/rack-C",
+        "dc2/rack-A",
+        "dc2/rack-B",
+        "dc2/rack-C"
+      ],
+      "type_histogram": {
+        "txn_fail": 0.3386,
+        "timeout": 0.3031,
+        "http_5xx": 0.2559,
+        "ext_slow": 0.0512,
+        "ext_unreach": 0.0433,
+        "latency_high": 0.0039,
+        "cpu_high": 0.0039
+      },
+      "max_severity": 5,
+      "alarm_count": 254,
+      "duration_minutes": 19.8,
+      "window_kinds": [
+        "burst",
+        "slow_burn"
+      ]
+    },
+    {
+      "incident_id": "INC-004",
+      "run_id": "2026-09-16T19:00:46",
+      "occurred_at": "2026-09-10T03:09:04",
+      "root_type": "db_conn_pool",
+      "root_service": "subscriber-db",
+      "services": [
+        "subscriber-db",
+        "subscriber-service"
+      ],
+      "locations": [
+        "dc1/rack-A",
+        "dc1/rack-B",
+        "dc1/rack-C",
+        "dc2/rack-B",
+        "dc2/rack-C"
+      ],
+      "type_histogram": {
+        "latency_high": 0.4444,
+        "db_conn_pool": 0.3056,
+        "cpu_high": 0.25
+      },
+      "max_severity": 4,
+      "alarm_count": 36,
+      "duration_minutes": 14.6,
+      "window_kinds": [
+        "slow_burn"
+      ]
+    },
+    {
+      "incident_id": "INC-005",
+      "run_id": "2026-09-16T19:00:46",
       "occurred_at": "2026-09-10T03:24:07",
       "root_type": "db_conn_pool",
       "root_service": "subscriber-db",

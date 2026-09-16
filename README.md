@@ -77,6 +77,16 @@ INDIRGEME : 3000 alarm -> 5 kart (600.0x)
 BUTUNLUK  : 705 (kart) + 2295 (gurultu) = 3000 / 3000  OK
 ```
 
+### Sunum/demo icin tek komut
+
+```bash
+./demo_baslat.sh        # Linux/macOS/Git Bash
+demo_baslat.bat         # Windows
+```
+
+Veri dogrulamasini ve motoru kosar, aksiyon gunlugunu temizler (tum kartlar
+"ACIK" baslar) ve panoyu acar. Sahne notlari: [docs/sunum.md](docs/sunum.md)
+
 **Deploy URL:** Yok — uygulama yerel calisir. Kalici veritabani gerektirmez,
 veri paketiyle sifirdan ayaga kalkar.
 
@@ -239,6 +249,7 @@ degil).
 
 ## 11. Belgeler
 
+- [docs/sunum.md](docs/sunum.md) — sunum runbook'u (demo koreografisi, juri sorulari)
 - [docs/plan.md](docs/plan.md) — faz faz calisma plani
 - [docs/fazlar.md](docs/fazlar.md) — faz gunlugu
 - [docs/mimari.md](docs/mimari.md) — mimari, algoritmalar, cikti sozlesmesi
