@@ -251,6 +251,20 @@ CRITICALITY_WEIGHT = {
     "dusuk": 0.25,
 }
 
+# Kalite kapisi — bir olayin *kendi kartini* hak etmesi icin asagidakilerden
+# en az birini saglamasi gerekir. Saglamayanlar "Diger / Kumelenmemis"
+# kartina, hangi olay olduklari ve neden alindiklari yazilarak tasinir.
+#
+# Neden gerekli: gurultu filtresinden gecen arka plan artiklari da zaman zaman
+# kume olusturabiliyor. Bunlar tek serviste kaliyor, kok nedenleri `cpu_high` /
+# `network_flap` / `mem_high` gibi olculen std'si ~35 dk olan (yani duzgun
+# dagilmis) tipler oluyor. Bu kartlar nobetci muhendise "burada bir ariza var"
+# der ama gosterecek bir arizasi yoktur. Panoyu sulandirmamak icin toplayici
+# karta aliniyorlar — silinmiyorlar, veri kaybi yok.
+CARD_QUALITY_MIN_SERVICES = 2       # birden fazla servise yayilmis mi
+CARD_QUALITY_MIN_SEVERITY = 5       # kritik siddet tasiyor mu
+CARD_QUALITY_MIN_TYPE_PRIOR = 0.5   # kok nedeni gercek bir "neden" tipi mi
+
 PRIORITY_WEIGHTS = {
     "severity": 0.40,   # Ortalama/maksimum siddet
     "breadth": 0.35,    # Etkilenen servis + host genisligi

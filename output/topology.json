@@ -1,0 +1,254 @@
+{
+  "services": [
+    "api-gateway",
+    "auth-service",
+    "batch-scheduler",
+    "billing-db",
+    "billing-service",
+    "cache-cluster",
+    "catalog-service",
+    "charging-service",
+    "dns-resolver",
+    "invoice-batch",
+    "kyc-provider-gw",
+    "load-balancer",
+    "message-queue",
+    "mobile-bff",
+    "notification-service",
+    "ntp-service",
+    "object-store",
+    "order-service",
+    "payment-provider-gw",
+    "payment-service",
+    "reconciliation-batch",
+    "report-batch",
+    "session-service",
+    "sms-gateway",
+    "subscriber-db",
+    "subscriber-service",
+    "web-bff"
+  ],
+  "edges": [
+    {
+      "kaynak_servis": "api-gateway",
+      "hedef_servis": "auth-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "api-gateway",
+      "hedef_servis": "load-balancer",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "mobile-bff",
+      "hedef_servis": "api-gateway",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "web-bff",
+      "hedef_servis": "api-gateway",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "mobile-bff",
+      "hedef_servis": "session-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "web-bff",
+      "hedef_servis": "session-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "auth-service",
+      "hedef_servis": "session-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "session-service",
+      "hedef_servis": "cache-cluster",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "subscriber-service",
+      "hedef_servis": "subscriber-db",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "subscriber-service",
+      "hedef_servis": "cache-cluster",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "billing-service",
+      "hedef_servis": "billing-db",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "billing-service",
+      "hedef_servis": "charging-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "charging-service",
+      "hedef_servis": "subscriber-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "payment-service",
+      "hedef_servis": "payment-provider-gw",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "payment-service",
+      "hedef_servis": "billing-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "order-service",
+      "hedef_servis": "payment-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "order-service",
+      "hedef_servis": "catalog-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "order-service",
+      "hedef_servis": "subscriber-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "mobile-bff",
+      "hedef_servis": "order-service",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "notification-service",
+      "hedef_servis": "sms-gateway",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "notification-service",
+      "hedef_servis": "message-queue",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "order-service",
+      "hedef_servis": "message-queue",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "invoice-batch",
+      "hedef_servis": "billing-db",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "invoice-batch",
+      "hedef_servis": "batch-scheduler",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "reconciliation-batch",
+      "hedef_servis": "batch-scheduler",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "reconciliation-batch",
+      "hedef_servis": "subscriber-db",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "report-batch",
+      "hedef_servis": "batch-scheduler",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "report-batch",
+      "hedef_servis": "subscriber-db",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "kritik"
+    },
+    {
+      "kaynak_servis": "auth-service",
+      "hedef_servis": "kyc-provider-gw",
+      "bagimlilik_tipi": "asenkron",
+      "kritiklik": "dusuk"
+    },
+    {
+      "kaynak_servis": "catalog-service",
+      "hedef_servis": "object-store",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "orta"
+    },
+    {
+      "kaynak_servis": "api-gateway",
+      "hedef_servis": "dns-resolver",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "yuksek"
+    },
+    {
+      "kaynak_servis": "subscriber-service",
+      "hedef_servis": "dns-resolver",
+      "bagimlilik_tipi": "senkron",
+      "kritiklik": "yuksek"
+    }
+  ],
+  "centrality": {
+    "api-gateway": 0.4,
+    "auth-service": 0.4,
+    "batch-scheduler": 0.6,
+    "billing-db": 0.55,
+    "billing-service": 0.35,
+    "cache-cluster": 1.0,
+    "catalog-service": 0.3,
+    "charging-service": 0.35,
+    "dns-resolver": 0.85,
+    "invoice-batch": 0.0,
+    "kyc-provider-gw": 0.4,
+    "load-balancer": 0.4,
+    "message-queue": 0.5,
+    "mobile-bff": 0.0,
+    "notification-service": 0.0,
+    "ntp-service": 0.0,
+    "object-store": 0.35,
+    "order-service": 0.2,
+    "payment-provider-gw": 0.35,
+    "payment-service": 0.3,
+    "reconciliation-batch": 0.0,
+    "report-batch": 0.0,
+    "session-service": 0.7,
+    "sms-gateway": 0.2,
+    "subscriber-db": 0.9,
+    "subscriber-service": 0.65,
+    "web-bff": 0.0
+  }
+}
