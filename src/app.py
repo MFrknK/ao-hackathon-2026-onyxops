@@ -1,4 +1,4 @@
-"""Faz 5 — OnyxOps operator panosu (Streamlit).
+"""Faz 5 — OnyxOps "Olay Izleme Merkezi" operator panosu (Streamlit).
 
     streamlit run src/app.py
 
@@ -6,14 +6,22 @@ Ana giris sayfasi (NOC gorunumu):
   1. Ozet serit    — islenen alarm, filtrelenen gurultu, kok nedene baglanan
                      alarm, uretilen kart, gurultu orani, siniflandirilamayan
   2. Zaman serisi  — dakika bazli yigilmis grafik; her olay kendi renginde,
-                     arka plan gurultusu gri. Alarm selinin hangi bolumunun
-                     hangi olaya ait oldugu tek bakista gorulur.
+                     arka plan gurultusu gri. Gosterge (legend) uzerine
+                     tiklanarak seriler acilip kapatilir; grafik yeniden
+                     yiginlanir. Imlec bir dakikanin uzerindeyken o dakikaya
+                     ait **tum** serilerin degerleri tek kutuda gosterilir.
   3. Sekmeler      — Olaylar & AI Hipotezleri · Denetim Gorunumu (Audit Log)
                      · Siniflandirilamayanlar · Topoloji · Boru Hatti
+
+Her olay kartindaki "(N Alarm)" dugmesine basildiginda, o olaya ait ham alarm
+akisi terminal gorunumunde acilir — operator hipotezin arkasindaki kayitlari
+tek tek dogrulayabilir.
 """
 
 from __future__ import annotations
 
+import csv
+import html
 import json
 import sys
 from datetime import datetime
@@ -30,7 +38,7 @@ from src import config
 from src.action_store import STATUS_LABELS, STATUSES, ActionStore
 
 st.set_page_config(
-    page_title="OnyxOps — Alarm Firtinasi",
+    page_title="Olay Izleme Merkezi (SRE) — OnyxOps",
     page_icon="🛰",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -47,16 +55,16 @@ INCIDENT_COLORS = [
     "#ff6fb5",  # pembe
     "#39d0c3",  # turkuaz
 ]
-NOISE_COLOR = "#3a4a63"
+NOISE_COLOR = "#33415c"
+BUCKET_COLOR = "#5b6b84"
 
-PRIORITY_COLORS = {
-    "P1": "#ef4a5b",
-    "P2": "#f2b705",
-    "P3": "#2ecc71",
-    "P4": "#6b7a90",
-}
-
+PRIORITY_COLORS = {"P1": "#ef4a5b", "P2": "#f2b705", "P3": "#2ecc71", "P4": "#6b7a90"}
 STATUS_COLORS = {"open": "#ef4a5b", "in_progress": "#f2b705", "resolved": "#2ecc71"}
+
+# Terminal log gorunumunde siddet renkleri.
+SEV_COLORS = {5: "#ff5d6c", 4: "#ff9f43", 3: "#f2c744", 2: "#4aa3ef", 1: "#7d8ca3"}
+
+MAX_LOG_LINES = 600  # performans siniri; asilirsa kullaniciya acikca soylenir
 
 
 # --------------------------------------------------------------------------
@@ -66,70 +74,97 @@ STATUS_COLORS = {"open": "#ef4a5b", "in_progress": "#f2b705", "resolved": "#2ecc
 st.markdown(
     """
     <style>
-      .block-container { padding-top: 1.2rem; padding-bottom: 2rem; max-width: 100%; }
+      .block-container { padding-top: 1rem; padding-bottom: 2rem; max-width: 100%; }
+      header[data-testid="stHeader"] { background: transparent; }
 
-      /* Ozet serit */
+      .hero { text-align: center; margin: 0 0 14px 0; }
+      .hero h1 {
+        font-size: 1.85rem; font-weight: 800; color: #e9eff8; margin: 0;
+        letter-spacing: .01em;
+      }
+      .hero .sub {
+        font-size: .70rem; font-weight: 700; letter-spacing: .16em;
+        color: #f2b705; text-transform: uppercase; margin-top: 5px;
+      }
+      .hero hr { border: none; border-top: 1px solid #1f2d45; margin: 12px 0 0 0; }
+
       .kpi-strip {
-        display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
-        gap: 0; background: #101a2b; border: 1px solid #1f2d45;
-        border-radius: 10px; padding: 14px 6px; margin-bottom: 14px;
+        display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0;
+        background: #101a2b; border: 1px solid #1f2d45; border-radius: 10px;
+        padding: 14px 6px; margin-bottom: 14px;
       }
       .kpi { text-align: center; padding: 2px 10px; border-right: 1px solid #1c2941; }
       .kpi:last-child { border-right: none; }
-      .kpi .v { font-size: 1.95rem; font-weight: 700; color: #f2b705; line-height: 1.15; }
+      .kpi .v { font-size: 2rem; font-weight: 700; color: #f2b705; line-height: 1.15; }
       .kpi .v.ok { color: #2ecc71; }
       .kpi .v.warn { color: #ef4a5b; }
       .kpi .l {
-        font-size: 0.66rem; letter-spacing: .08em; text-transform: uppercase;
+        font-size: .66rem; letter-spacing: .09em; text-transform: uppercase;
         color: #8ea0bb; margin-top: 4px;
       }
 
-      /* Olay karti */
       .icard {
         background: #101a2b; border: 1px solid #1f2d45; border-radius: 10px;
-        padding: 14px 15px; height: 100%;
+        padding: 14px 15px 10px 15px;
       }
-      .icard h4 {
-        margin: 0 0 8px 0; font-size: 1.02rem; color: #e6ecf5; line-height: 1.3;
-      }
-      .icard h4 .cnt { color: #4aa3ef; font-weight: 600; font-size: .92rem; }
+      .icard h4 { margin: 0 0 9px 0; font-size: 1.0rem; color: #e9eff8; line-height: 1.32; }
       .badge {
-        float: right; font-size: .68rem; font-weight: 700; padding: 3px 9px;
+        float: right; font-size: .66rem; font-weight: 700; padding: 3px 9px;
         border-radius: 20px; color: #0b1220;
       }
       .pattern {
-        display: inline-block; background: #17263d; border: 1px solid #273category;
-        border: 1px solid #27384f; color: #9fd0ff; font-size: .68rem;
-        padding: 3px 8px; border-radius: 5px; margin-bottom: 10px;
+        display: inline-block; background: #16243a; border: 1px solid #27384f;
+        color: #9fd0ff; font-size: .67rem; padding: 3px 8px; border-radius: 5px;
+        margin-bottom: 9px;
       }
-      .meta { font-size: .8rem; color: #b9c7db; margin: 3px 0; }
-      .meta b { color: #e6ecf5; }
+      .meta { font-size: .79rem; color: #b9c7db; margin: 3px 0; }
+      .meta b { color: #e9eff8; }
       .svc { color: #f2b705; font-weight: 600; }
 
       .hypo {
-        background: #131f33; border: 1px solid #263консольb;
-        border: 1px solid #26374f; border-left: 3px solid #f2b705;
-        border-radius: 6px; padding: 10px 11px; margin: 10px 0;
+        background: #131f33; border: 1px solid #26374f; border-left: 3px solid #f2b705;
+        border-radius: 6px; padding: 10px 11px; margin: 10px 0 8px 0;
       }
       .hypo .t {
         color: #f2b705; font-weight: 700; font-size: .74rem; font-style: italic;
         margin-bottom: 5px;
       }
-      .hypo .q { color: #dbe5f2; font-size: .79rem; line-height: 1.45; }
+      .hypo .q { color: #dbe5f2; font-size: .78rem; line-height: 1.45; }
       .hypo .c {
-        color: #8fa3bd; font-size: .73rem; font-style: italic; margin-top: 7px;
-        line-height: 1.4;
+        color: #8fa3bd; font-size: .72rem; font-style: italic; margin-top: 7px;
+        line-height: 1.42;
       }
       .act {
         background: #131f33; border: 1px solid #26374f; border-left: 3px solid #2ecc71;
-        border-radius: 6px; padding: 10px 11px; margin-top: 8px;
+        border-radius: 6px; padding: 10px 11px; margin-bottom: 8px;
       }
-      .act .t { color: #e6ecf5; font-weight: 700; font-size: .76rem; }
-      .act .b { color: #c6d3e5; font-size: .79rem; line-height: 1.45; }
-      .act .o { color: #9fb3cd; font-size: .74rem; margin-top: 5px; }
-      .act .o b { color: #e6ecf5; }
+      .act .t { color: #e9eff8; font-weight: 700; font-size: .75rem; }
+      .act .b { color: #c6d3e5; font-size: .78rem; line-height: 1.45; }
+      .act .o { color: #9fb3cd; font-size: .73rem; margin-top: 5px; }
+      .act .o b { color: #e9eff8; }
 
-      div[data-testid="stSelectbox"] label { font-size: .74rem; color: #8ea0bb; }
+      /* "(N Alarm)" log dugmesi — baslikta mavi bir bag gibi dursun */
+      div[data-testid="stPopover"] > div > button {
+        background: transparent !important; border: none !important;
+        color: #4aa3ef !important; font-weight: 700 !important;
+        padding: 0 !important; min-height: 0 !important; font-size: .92rem !important;
+      }
+      div[data-testid="stPopover"] > div > button:hover { color: #7cc0ff !important; }
+
+      /* Terminal log gorunumu */
+      .logbox {
+        background: #05080f; border: 1px solid #1f2d45; border-radius: 6px;
+        padding: 10px 12px; max-height: 460px; overflow-y: auto;
+        font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+        font-size: .745rem; line-height: 1.62; white-space: pre;
+      }
+      .logbox .ts { color: #6b7a90; }
+      .logbox .id { color: #56d364; }
+      .logbox .sv { color: #b9c7db; }
+      .logbox .msg { color: #c9d6e6; }
+
+      button[data-baseweb="tab"] { font-size: .86rem; }
+      div[data-testid="stSelectbox"] label { font-size: .73rem; color: #8ea0bb; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -154,6 +189,17 @@ def load_payload(_stamp: float) -> tuple[dict, dict]:
     return incidents, ledger
 
 
+@st.cache_data(show_spinner=False)
+def load_alarm_index() -> dict[str, dict]:
+    """alarm_id -> ham alarm satiri. Kart icindeki log gorunumu icin.
+
+    Ham kayitlar cikti JSON'una kopyalanmiyor (gereksiz sisirme); pano
+    dogrudan kaynak CSV'den okuyor.
+    """
+    with config.ALARMS_CSV.open(encoding="utf-8-sig", newline="") as fh:
+        return {row["alarm_id"]: row for row in csv.DictReader(fh)}
+
+
 def ensure_outputs() -> tuple[dict, dict]:
     if not config.INCIDENTS_JSON.is_file() or not config.NOISE_LEDGER_JSON.is_file():
         with st.spinner("Korelasyon motoru ilk kez calistiriliyor (3.000 alarm)..."):
@@ -169,6 +215,7 @@ def fmt_time(iso: str) -> str:
 
 
 payload, ledger = ensure_outputs()
+alarm_index = load_alarm_index()
 summary = payload["summary"]
 cards = payload["incidents"]
 timeline = payload.get("timeline", [])
@@ -177,9 +224,7 @@ store = ActionStore()
 store.sync_with_cards(cards)
 
 event_cards = [c for c in cards if c["incident_id"] != "INC-UNCLUSTERED"]
-bucket_card = next(
-    (c for c in cards if c["incident_id"] == "INC-UNCLUSTERED"), None
-)
+bucket_card = next((c for c in cards if c["incident_id"] == "INC-UNCLUSTERED"), None)
 color_of = {
     c["incident_id"]: INCIDENT_COLORS[i % len(INCIDENT_COLORS)]
     for i, c in enumerate(event_cards)
@@ -187,8 +232,15 @@ color_of = {
 
 
 # ==========================================================================
-# 1) OZET SERIT
+# BASLIK + OZET SERIT
 # ==========================================================================
+
+st.markdown(
+    "<div class='hero'><h1>Olay Izleme Merkezi (SRE)</h1>"
+    "<div class='sub'>AO Hackathon 2026 · Alarm Indirgeme Motoru</div>"
+    "<hr></div>",
+    unsafe_allow_html=True,
+)
 
 root_linked = sum(c["alarm_count"] for c in event_cards)
 unclassified = bucket_card["alarm_count"] if bucket_card else 0
@@ -203,11 +255,15 @@ def kpi(value: str, label: str, tone: str = "") -> str:
     )
 
 
+def tr_num(n: int) -> str:
+    return f"{n:,}".replace(",", ".")
+
+
 st.markdown(
     "<div class='kpi-strip'>"
-    + kpi(f"{summary['total_alarms']:,}".replace(",", "."), "Islenen toplam alarm")
-    + kpi(f"{summary['noise_alarms']:,}".replace(",", "."), "Filtrelenen gurultu")
-    + kpi(f"{root_linked:,}".replace(",", "."), "Kok nedene baglanan alarm")
+    + kpi(tr_num(summary["total_alarms"]), "Islenen toplam alarm")
+    + kpi(tr_num(summary["noise_alarms"]), "Filtrelenen gurultu")
+    + kpi(tr_num(root_linked), "Kok nedene baglanan alarm")
     + kpi(str(len(event_cards)), "Uretilen olay karti")
     + kpi(f"%{noise_ratio * 100:.1f}", "Gurultu orani")
     + kpi(
@@ -221,70 +277,104 @@ st.markdown(
 
 
 # ==========================================================================
-# 2) ZAMAN SERISI
+# ZAMAN SERISI
 # ==========================================================================
 
 if timeline:
     label_of = {c["incident_id"]: c["display_title"] for c in cards}
     label_of["NOISE"] = "Gurultu (Arka Plan)"
 
+    order = ["NOISE"] + [c["incident_id"] for c in event_cards]
+    if bucket_card:
+        order.append("INC-UNCLUSTERED")
+
     rows = []
     for bucket in timeline:
         moment = datetime.fromisoformat(bucket["minute"])
-        for key, count in bucket["counts"].items():
+        counts = bucket["counts"]
+        # Her dakika icin tum serileri yaz (0 olanlar dahil) — tooltip'te
+        # "Disk Dolulugu: 0" satirinin gorunmesi icin gerekli.
+        for key in order:
             rows.append(
                 {
                     "Dakika": moment,
                     "Seri": label_of.get(key, key),
-                    "key": key,
-                    "Alarm": count,
+                    "Alarm": counts.get(key, 0),
                 }
             )
     df = pd.DataFrame(rows)
 
-    order = ["NOISE"] + [c["incident_id"] for c in event_cards]
-    if bucket_card:
-        order.append("INC-UNCLUSTERED")
-    domain = [label_of.get(k, k) for k in order if label_of.get(k) in set(df["Seri"])]
+    domain = [label_of[k] for k in order]
     palette = {label_of["NOISE"]: NOISE_COLOR}
     for c in event_cards:
         palette[c["display_title"]] = color_of[c["incident_id"]]
     if bucket_card:
-        palette[bucket_card["display_title"]] = "#5b6b84"
-    colors = [palette.get(name, "#6b7a90") for name in domain]
+        palette[bucket_card["display_title"]] = BUCKET_COLOR
+    colors = [palette[name] for name in domain]
 
-    chart = (
-        alt.Chart(df)
-        .mark_bar(size=9)
-        .encode(
-            x=alt.X(
-                "Dakika:T",
-                title=None,
-                axis=alt.Axis(format="%H:%M", tickCount=20, labelColor="#8ea0bb",
-                              grid=False, domainColor="#26374f"),
-            ),
-            y=alt.Y(
-                "Alarm:Q",
-                title=None,
-                axis=alt.Axis(labelColor="#8ea0bb", gridColor="#1b2740"),
-            ),
-            color=alt.Color(
-                "Seri:N",
-                scale=alt.Scale(domain=domain, range=colors),
-                legend=alt.Legend(
-                    orient="top", title=None, labelColor="#c6d3e5",
-                    symbolType="square", columns=len(domain),
-                ),
-                sort=domain,
-            ),
-            order=alt.Order("Seri:N", sort="descending"),
-            tooltip=["Dakika:T", "Seri:N", "Alarm:Q"],
-        )
-        .properties(height=300)
-        .configure_view(strokeWidth=0)
-        .configure(background="#101a2b")
+    # Gostergeye tiklanarak seriler acilip kapatilir; grafik yeniden yiginlanir.
+    legend_sel = alt.selection_point(fields=["Seri"], bind="legend")
+    hover = alt.selection_point(
+        fields=["Dakika"], nearest=True, on="mouseover", empty=False, clear="mouseout"
     )
-    st.altair_chart(chart, use_container_width=True)
+
+    base = alt.Chart(df).transform_filter(legend_sel)
+
+    bars = base.mark_bar(size=9).encode(
+        x=alt.X(
+            "Dakika:T",
+            title=None,
+            axis=alt.Axis(
+                format="%H:%M", tickCount=21, labelColor="#8ea0bb",
+                grid=False, domainColor="#26374f", labelFontSize=11,
+            ),
+        ),
+        y=alt.Y(
+            "Alarm:Q",
+            title=None,
+            axis=alt.Axis(labelColor="#8ea0bb", gridColor="#1a2740", labelFontSize=11),
+        ),
+        color=alt.Color(
+            "Seri:N",
+            scale=alt.Scale(domain=domain, range=colors),
+            legend=alt.Legend(
+                orient="top", title=None, labelColor="#c6d3e5",
+                symbolType="square", labelFontSize=12, columns=len(domain),
+            ),
+            sort=domain,
+        ),
+        order=alt.Order("Seri:N", sort="descending"),
+    )
+
+    # Imlecin bulundugu dakikanin TUM serilerini tek kutuda gosteren katman.
+    tooltip_fields = [alt.Tooltip("Dakika:T", format="%H:%M", title="Saat")] + [
+        alt.Tooltip(f"{name}:Q", title=name) for name in domain
+    ]
+    hover_layer = (
+        alt.Chart(df)
+        .transform_pivot("Seri", value="Alarm", groupby=["Dakika"])
+        .mark_rule(color="#8ea0bb", strokeWidth=1)
+        .encode(
+            x=alt.X("Dakika:T", title=None),
+            opacity=alt.condition(hover, alt.value(0.35), alt.value(0)),
+            tooltip=tooltip_fields,
+        )
+        .add_params(hover)
+    )
+
+    st.altair_chart(
+        (bars + hover_layer)
+        .add_params(legend_sel)
+        .properties(height=320)
+        .configure_view(strokeWidth=0)
+        .configure(background="#101a2b"),
+        use_container_width=True,
+    )
+    st.caption(
+        "Gosterge uzerindeki bir seriye tiklayarak o olayin alarmlarini acip "
+        "kapatabilirsiniz (birden fazlasi icin Shift ile secin). Bir dakikanin "
+        "uzerine gelince tum serilerin o dakikadaki degeri gorunur."
+    )
 
 
 # ==========================================================================
@@ -293,17 +383,53 @@ if timeline:
 
 tab_events, tab_audit, tab_unclassified, tab_topology, tab_pipeline = st.tabs(
     [
-        "Olaylar & AI Hipotezleri",
-        f"Denetim Gorunumu (Audit Log) · {ledger['total_noise']}",
-        f"Siniflandirilamayanlar · {unclassified}",
-        "Topoloji",
-        "Boru Hatti",
+        "🎯 Olaylar & AI Hipotezleri",
+        f"🛡 Denetim Gorunumu (Audit Log) · {ledger['total_noise']}",
+        f"🔍 Siniflandirilamayanlar · {unclassified}",
+        "🕸 Topoloji",
+        "⚙ Boru Hatti",
     ]
 )
 
 
 # --------------------------------------------------------------------------
-# Olay kartlari
+# Ham alarm akisi (terminal gorunumu)
+# --------------------------------------------------------------------------
+
+
+def render_log(alarm_ids: list[str]) -> None:
+    """Olaya ait ham alarm kayitlarini terminal gorunumunde yazar."""
+    records = [alarm_index[a] for a in alarm_ids if a in alarm_index]
+    records.sort(key=lambda r: (r["timestamp"], r["alarm_id"]))
+
+    shown = records[:MAX_LOG_LINES]
+    lines = []
+    for row in shown:
+        sev = int(row["severity"])
+        color = SEV_COLORS.get(sev, "#b9c7db")
+        stamp = row["timestamp"][11:19]
+        lines.append(
+            f"<span class='ts'>[{stamp}]</span> "
+            f"<span class='sv' style='color:{color}'>[SEV {sev}]</span> "
+            f"<span class='id'>[{html.escape(row['alarm_id'])}]</span> "
+            f"<span style='color:{color}'>[{html.escape(row['service'])}]</span> "
+            f"<span class='msg'>{html.escape(row['message'])}</span>"
+        )
+
+    st.markdown(
+        f"<div class='logbox'>{'<br>'.join(lines)}</div>", unsafe_allow_html=True
+    )
+    if len(records) > MAX_LOG_LINES:
+        st.caption(
+            f"Ilk {MAX_LOG_LINES} kayit gosteriliyor (toplam {len(records)}). "
+            "Tamami `output/incidents.json` icindeki `alarm_ids` alaninda."
+        )
+    else:
+        st.caption(f"{len(records)} kayit — olayin ham alarm akisinin tamami.")
+
+
+# --------------------------------------------------------------------------
+# Olay karti
 # --------------------------------------------------------------------------
 
 
@@ -316,59 +442,73 @@ def render_card(card: dict, accent: str) -> None:
     status = store.status_of(incident_id)
     tr = card["time_range"]
 
-    badge_color = PRIORITY_COLORS.get(card.get("priority", "P3"), "#6b7a90")
-
+    badge = PRIORITY_COLORS.get(card.get("priority", "P3"), "#6b7a90")
     patterns = (card.get("similar_patterns") or {}).get("known_patterns") or []
+
     pattern_chip = ""
     if patterns:
         top = patterns[0]
         pattern_chip = (
-            f"<div class='pattern'>⚡ Gecmis Oruntu: {top['name']} "
+            f"<div class='pattern'>⚡ Gecmis Oruntu: {html.escape(top['name'])} "
             f"(%{top['confidence'] * 100:.0f} Benzerlik)</div>"
         )
 
     services = card["affected_services"]
     svc_text = ", ".join(services[:3]) + ("..." if len(services) > 3 else "")
 
-    html = [
-        f"<div class='icard' style='border-top:3px solid {accent}'>",
-        f"<h4><span class='badge' style='background:{badge_color}'>"
-        f"{card.get('priority_label', '')}</span>{card['display_title']} "
-        f"<span class='cnt'>({card['alarm_count']} Alarm)</span></h4>",
-        pattern_chip,
+    st.markdown(
+        f"<div class='icard' style='border-top:3px solid {accent}'>"
+        f"<h4><span class='badge' style='background:{badge}'>"
+        f"{card.get('priority_label', '')}</span>"
+        f"{html.escape(card['display_title'])}</h4>",
+        unsafe_allow_html=True,
+    )
+
+    # "(N Alarm)" — tiklaninca ham alarm akisi acilir.
+    with st.popover(f"({card['alarm_count']} Alarm)", use_container_width=False):
+        st.markdown(
+            f"**{card['display_title']}** — ham alarm akisi "
+            f"({fmt_time(tr['start'])} - {fmt_time(tr['end'])})"
+        )
+        render_log(card["alarm_ids"])
+
+    body = [pattern_chip]
+    body.append(
         f"<div class='meta'><b>Zaman Araligi:</b> {fmt_time(tr['start'])} - "
-        f"{fmt_time(tr['end'])}</div>",
+        f"{fmt_time(tr['end'])}</div>"
+    )
+    body.append(
         f"<div class='meta'><b>Etkilenen Servisler:</b> "
-        f"<span class='svc'>{svc_text}</span></div>",
-    ]
+        f"<span class='svc'>{html.escape(svc_text)}</span></div>"
+    )
 
     if root.get("alarm_id"):
-        html.append(
+        body.append(
             "<div class='hypo'><div class='t'>AI Kok Neden Hipotezi:</div>"
-            f"<div class='q'>\"{root['explanation']}\"</div>"
+            f"<div class='q'>\"{html.escape(root['explanation'])}\"</div>"
         )
         if counter:
-            html.append(
-                f"<div class='c'>Karsi Olasilik: {counter['reason']}</div>"
+            body.append(
+                f"<div class='c'>Karsi Olasilik: {html.escape(counter['reason'])}</div>"
             )
-        html.append("</div>")
+        body.append("</div>")
     else:
-        html.append(
+        body.append(
             "<div class='hypo'><div class='t'>Kok neden atanmadi</div>"
-            f"<div class='q'>{root.get('explanation', '')}</div></div>"
+            f"<div class='q'>{html.escape(root.get('explanation', ''))}</div></div>"
         )
 
-    html.append(
+    body.append(
         "<div class='act'><div class='t'>Ilk Aksiyon:</div>"
-        f"<div class='b'>{record.action if record else action.get('action', '-')}</div>"
+        f"<div class='b'>"
+        f"{html.escape(record.action if record else action.get('action', '-'))}</div>"
         f"<div class='o'><b>Sorumlu:</b> "
-        f"{record.owner if record else action.get('owner', '-')} &nbsp;·&nbsp; "
-        f"<b>Durum:</b> <span style='color:{STATUS_COLORS.get(status, '#fff')}'>"
-        f"{STATUS_LABELS.get(status, status).upper()}</span></div></div>"
+        f"{html.escape(record.owner if record else action.get('owner', '-'))}"
+        f" &nbsp;·&nbsp; <b>Durum:</b> "
+        f"<span style='color:{STATUS_COLORS.get(status, '#fff')}'>"
+        f"{STATUS_LABELS.get(status, status).upper()}</span></div></div></div>"
     )
-    html.append("</div>")
-
-    st.markdown("".join(html), unsafe_allow_html=True)
+    st.markdown("".join(body), unsafe_allow_html=True)
 
     new_status = st.selectbox(
         "Durum",
@@ -411,9 +551,7 @@ def render_card(card: dict, accent: str) -> None:
                 st.markdown(f"{step}. {text}")
             st.caption(f"Tipik cozum suresi: {pattern['typical_resolution']}")
 
-        neighbours = (card.get("similar_patterns") or {}).get(
-            "similar_incidents"
-        ) or []
+        neighbours = (card.get("similar_patterns") or {}).get("similar_incidents") or []
         if neighbours:
             st.markdown("**Benzer olaylar**")
             for match in neighbours:
@@ -425,11 +563,7 @@ def render_card(card: dict, accent: str) -> None:
                 st.markdown(
                     f"- {match['incident_id']} (%{match['similarity'] * 100:.0f}, "
                     f"{origin}) — `{match['root_cause']}`"
-                    + (
-                        " · " + "; ".join(match["why"])
-                        if match.get("why")
-                        else ""
-                    )
+                    + ("  ·  " + "; ".join(match["why"]) if match.get("why") else "")
                 )
 
         if card.get("correlation_reasons"):
@@ -452,9 +586,8 @@ with tab_events:
         f"{summary['total_alarms']} alarm, {summary['clusters']} zamansal kume ve "
         f"{summary['incidents_detected']} olay uzerinden {len(event_cards)} olay "
         f"kartina indirgendi (ust sinir {summary['cap']}). Kartlar oncelige gore "
-        "sirali."
+        "sirali; alarm sayisina tiklayarak ham akisi gorebilirsiniz."
     )
-
     if event_cards:
         columns = st.columns(len(event_cards), gap="small")
         for column, card in zip(columns, event_cards, strict=False):
@@ -565,6 +698,9 @@ with tab_unclassified:
         for reason in bucket_card.get("evidence", []):
             st.markdown(f"- {reason}")
 
+        with st.popover(f"Ham alarm akisi ({bucket_card['alarm_count']} kayit)"):
+            render_log(bucket_card["alarm_ids"])
+
         if bucket_card.get("rolled_up_incidents"):
             st.markdown("**Bu karta toplanan olaylar**")
             st.dataframe(
@@ -596,7 +732,7 @@ with tab_unclassified:
             ),
             hide_index=True,
             width="stretch",
-            height=280,
+            height=260,
         )
 
 
@@ -680,7 +816,12 @@ with tab_pipeline:
                 k: v
                 for k, v in summary.items()
                 if k
-                not in {"integrity", "noise_rules", "cluster_kinds", "explanation_engine"}
+                not in {
+                    "integrity",
+                    "noise_rules",
+                    "cluster_kinds",
+                    "explanation_engine",
+                }
             }
         )
 

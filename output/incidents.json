@@ -1,6 +1,6 @@
 {
   "summary": {
-    "generated_at": "2026-09-16T16:57:39.354477",
+    "generated_at": "2026-09-16T17:13:15.911133",
     "runtime_seconds": 0.1,
     "total_alarms": 3000,
     "noise_alarms": 1337,
@@ -1670,12 +1670,12 @@
         "action": "ao-045-dns / dns-resolver: Arayuzun fiziksel baglantisini ve switch port durumunu kontrol edin; gerekirse yedek hatta gecin. (Etki: 14 servis, 543 alarm.)",
         "owner": "network-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1756,9 +1756,24 @@
               "alarm tipi profili cok benzer (kosinus 1.00)",
               "ayni kok servis (`dns-resolver`)"
             ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-001",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T01:35:08",
+            "similarity": 1.0,
+            "root_cause": "dns-resolver/network_down",
+            "alarm_count": 543,
+            "why": [
+              "ayni kok neden tipi (`network_down`)",
+              "14 ortak servis (api-gateway, auth-service, billing-service, charging-service...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`dns-resolver`)"
+            ]
           }
         ],
-        "history_runs_compared": 1
+        "history_runs_compared": 2
       }
     },
     {
@@ -2201,12 +2216,12 @@
         "action": "ao-035-billing / billing-db: Diski acil bosaltin (log/temp temizligi), ardindan kalici kapasite artisi planlayin. (Etki: 7 servis, 321 alarm.)",
         "owner": "storage-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2271,9 +2286,24 @@
               "alarm tipi profili cok benzer (kosinus 1.00)",
               "ayni kok servis (`billing-db`)"
             ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-002",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T02:02:35",
+            "similarity": 1.0,
+            "root_cause": "billing-db/disk_full",
+            "alarm_count": 321,
+            "why": [
+              "ayni kok neden tipi (`disk_full`)",
+              "7 ortak servis (billing-db, billing-service, charging-service, invoice-batch...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`billing-db`)"
+            ]
           }
         ],
-        "history_runs_compared": 1
+        "history_runs_compared": 2
       }
     },
     {
@@ -2721,12 +2751,12 @@
         "action": "ao-014-session / session-service: Servisi kontrollu yeniden baslatin ve heap/bellek profilini alarak sizinti kaynagini bulun. (Etki: 6 servis, 330 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2792,9 +2822,24 @@
             ]
           },
           {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T02:35:23",
+            "similarity": 1.0,
+            "root_cause": "session-service/oom_risk",
+            "alarm_count": 330,
+            "why": [
+              "ayni kok neden tipi (`oom_risk`)",
+              "6 ortak servis (mobile-bff, order-service, payment-provider-gw, payment-service...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
             "source": "ayni_calistirma",
             "incident_id": "INC-005",
-            "run_id": "2026-09-16T16:57:39",
+            "run_id": "2026-09-16T17:13:15",
             "occurred_at": "2026-09-10T02:20:46",
             "similarity": 0.416,
             "root_cause": "session-service/gc_pressure",
@@ -2818,9 +2863,23 @@
               "1 ortak servis (session-service)",
               "ayni kok servis (`session-service`)"
             ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T02:20:46",
+            "similarity": 0.416,
+            "root_cause": "session-service/gc_pressure",
+            "alarm_count": 18,
+            "why": [
+              "ayni ariza ailesi (`oom_risk` ~ `gc_pressure`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
           }
         ],
-        "history_runs_compared": 1
+        "history_runs_compared": 2
       }
     },
     {
@@ -3045,12 +3104,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 3 servis, 124 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -3106,9 +3165,24 @@
               "alarm tipi profili cok benzer (kosinus 1.00)",
               "ayni kok servis (`subscriber-db`)"
             ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-004",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T03:05:40",
+            "similarity": 1.0,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 124,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "3 ortak servis (reconciliation-batch, subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
           }
         ],
-        "history_runs_compared": 1
+        "history_runs_compared": 2
       }
     },
     {
@@ -3215,12 +3289,12 @@
         "action": "ao-013-session / session-service: GC duraklamalarini analiz edin, heap boyutu ve GC parametrelerini gozden gecirin. (Etki: 1 servis, 18 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -3275,9 +3349,24 @@
             ]
           },
           {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T02:20:46",
+            "similarity": 1.0,
+            "root_cause": "session-service/gc_pressure",
+            "alarm_count": 18,
+            "why": [
+              "ayni kok neden tipi (`gc_pressure`)",
+              "1 ortak servis (session-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
             "source": "ayni_calistirma",
             "incident_id": "INC-003",
-            "run_id": "2026-09-16T16:57:39",
+            "run_id": "2026-09-16T17:13:15",
             "occurred_at": "2026-09-10T02:35:23",
             "similarity": 0.416,
             "root_cause": "session-service/oom_risk",
@@ -3301,9 +3390,23 @@
               "1 ortak servis (session-service)",
               "ayni kok servis (`session-service`)"
             ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T16:57:39",
+            "occurred_at": "2026-09-10T02:35:23",
+            "similarity": 0.416,
+            "root_cause": "session-service/oom_risk",
+            "alarm_count": 330,
+            "why": [
+              "ayni ariza ailesi (`gc_pressure` ~ `oom_risk`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
           }
         ],
-        "history_runs_compared": 1
+        "history_runs_compared": 2
       }
     },
     {
@@ -3775,12 +3878,12 @@
         "action": "Dusuk oncelikli artik sinyalleri toplu olarak gozden gecirin; tekrar eden bir oruntu varsa esikleri yeniden ayarlayin.",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:57:39.354477",
-        "updated_at": "2026-09-16T16:57:39.354477",
+        "created_at": "2026-09-16T17:13:15.911133",
+        "updated_at": "2026-09-16T17:13:15.911133",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:57:39.354477",
+            "at": "2026-09-16T17:13:15.911133",
             "note": "Toplayici kart otomatik olarak acildi."
           }
         ]

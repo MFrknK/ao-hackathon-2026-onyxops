@@ -68,7 +68,9 @@ def main() -> int:
         _settle(page, 8000)
 
         tabs = [t.strip() for t in page.get_by_role("tab").all_inner_texts()]
-        print(f"Bulunan sekmeler: {tabs}")
+        # Sekme etiketleri emoji iceriyor; Windows konsolu (cp1252) basamaz.
+        safe = [t.encode("ascii", "ignore").decode().strip() for t in tabs]
+        print(f"Bulunan sekmeler: {safe}")
         print("Ekran goruntuleri aliniyor...")
 
         # --- 1) Ana giris sayfasi: ozet serit + zaman serisi + kartlar ----
@@ -78,6 +80,17 @@ def main() -> int:
         # --- 2) Olay kartlari serisi --------------------------------------
         _scroll_main(page, 520)
         _shot(page, "03-olay-kartlari.png")
+
+        # --- 2b) "(N Alarm)" -> ham alarm akisi (terminal gorunumu) -------
+        try:
+            page.get_by_role("button", name="Alarm)").first.click()
+            _settle(page, 1800)
+            print("  ham alarm akisi penceresi acildi")
+            _shot(page, "03b-ham-alarm-akisi.png")
+            page.keyboard.press("Escape")
+            _settle(page, 900)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  [uyari] log penceresi acilamadi: {exc}")
 
         # --- 3) Kart ayrintisi: kanit, puan, oruntu -----------------------
         try:

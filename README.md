@@ -116,6 +116,13 @@ Ayrintili anlatim: [docs/mimari.md](docs/mimari.md)
 Her kartta 5 bilesenli puan kirilimi, veriden turetilmis kanit maddeleri ve
 farkli bir servisten gelen **karsi hipotez** yer alir.
 
+### Ham alarm akisi — kartin arkasindaki kayitlar
+![Ham alarm akisi](demo/03b-ham-alarm-akisi.png)
+
+Kart basligindaki **(543 Alarm)** dugmesine basildiginda o olaya ait ham alarm
+akisi terminal gorunumunde acilir. Operator, AI hipotezinin arkasindaki
+kayitlari tek tek dogrulayabilir — hicbir sey kara kutu degil.
+
 ### Benzer gecmis oruntuler (X-Factor)
 ![Benzer oruntuler](demo/04-kart-ayrinti-kanit-oruntu.png)
 
