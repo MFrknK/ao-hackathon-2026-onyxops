@@ -15,7 +15,8 @@
     "incidents": "output/incidents.json",
     "noise_ledger": "output/noise_ledger.json",
     "action_log": "output/action_log.json",
-    "topology": "output/topology.json"
+    "topology": "output/topology.json",
+    "incident_history": "output/incident_history.json"
   },
   "docs": {
     "plan": "docs/plan.md",
@@ -51,7 +52,9 @@
       "no_data_loss": true,
       "all_alarm_ids_unique": true
     },
-    "deterministic": true
+    "deterministic": true,
+    "pattern_matches": 5,
+    "known_pattern_library_size": 6
   },
   "incidents": [
     {
@@ -108,6 +111,7 @@
     "dogal_dil_kok_neden_aciklamasi": true,
     "karsi_hipotez": true,
     "gurultu_denetim_gorunumu": true,
+    "benzer_gecmis_olay_oruntuleri": true,
     "denetlenebilir_veri_butunlugu": true,
     "olcume_dayali_parametre_kalibrasyonu": true
   },
@@ -136,6 +140,7 @@
     "demo/01-olay-panosu.png",
     "demo/02-kok-neden-kanit.png",
     "demo/03-karsi-hipotez-aksiyon.png",
+    "demo/03b-benzer-oruntuler.png",
     "demo/04-aksiyon-durum-degisti.png",
     "demo/05-gurultu-denetimi.png",
     "demo/06-gurultu-defteri-tablo.png",

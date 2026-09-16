@@ -15,6 +15,7 @@
 | Elenen gurultu | **1.337** (%44.6), tamami gerekceli | [output/noise_ledger.json](output/noise_ledger.json) |
 | Tespit edilen olay | 11 (5'i kendi kartini aldi) | `summary.incidents_detected` |
 | Veri butunlugu | 1663 (kart) + 1337 (gurultu) = **3000** | `summary.integrity.no_data_loss: true` |
+| Bilinen oruntu eslesmesi | **5 / 5 kart** | `incidents[].similar_patterns.known_patterns` |
 | Calisma suresi | **0.11 sn** | `summary.runtime_seconds` |
 
 Uretilen kartlar:
@@ -115,29 +116,63 @@ tasiyor: farkli bir servisten en yuksek puanli alternatif, puan farki ve
 "neden hala masada" gerekcesiyle. Ayni servisten ikinci bir alarm alternatif
 sayilmaz — karsi hipotezin degeri operatore *baska bir yere* bakmayi
 onermesindedir.
-Kod: [src/root_cause.py](src/root_cause.py) · Ekran: [demo/03-kok-neden.png](demo/03-kok-neden.png)
+Kod: [src/root_cause.py](src/root_cause.py) · Ekran: [demo/03-karsi-hipotez-aksiyon.png](demo/03-karsi-hipotez-aksiyon.png)
 
 ### 4.2 Gurultu denetim gorunumu
 Elenen 1.337 alarmin **tamami** silinmeden, hangi kuralla ve neden elendigi
 yazili olarak Gurultu Defteri'nde. Panoda kural/siddet/servis/metin filtresiyle
 denetlenebiliyor.
 Kod: [src/noise_filter.py](src/noise_filter.py) · Cikti: [output/noise_ledger.json](output/noise_ledger.json)
-· Ekran: [demo/04-gurultu-denetimi.png](demo/04-gurultu-denetimi.png)
+· Ekran: [demo/05-gurultu-denetimi.png](demo/05-gurultu-denetimi.png)
 
-### 4.3 Izlenebilir aksiyon (opsiyonel gereksinim)
+### 4.3 Benzer gecmis olay oruntuleri
+Her kart iki kaynaktan gelen oruntu eslesmesi tasiyor:
+
+**(a) Bilinen ariza oruntuleri.** Adi konmus alti ariza imzasi tanimli
+(kabin ag kesintisi, disk dolmasi kaskadi, bellek sizintisi, dis saglayici
+kesintisi, baglanti havuzu tukenmesi, toplu is cakismasi). Her oruntu bir kok
+neden tipi kumesi, beklenen semptom zinciri ve **ilk mudahale playbook'u**
+tasiyor. Bu calistirmada **5 kartin 5'i** bir oruntuyle eslesti:
+
+| Kart | Eslesen oruntu | Uyum |
+|---|---|---|
+| INC-001 | Kabin/omurga ag kesintisi | %93 |
+| INC-003 | Bellek sizintisi (yavas gelisen) | %84 |
+| INC-002 | Disk dolmasi -> veritabani yazma kaskadi | %83 |
+| INC-004 | Veritabani baglanti havuzu tukenmesi | %66 |
+| INC-005 | Bellek sizintisi (yavas gelisen) | %66 |
+
+**(b) Gecmis calistirma arsivi.** Her calistirmanin olay imzalari
+`output/incident_history.json` dosyasina ekleniyor; sonraki calistirmalarda
+yeni olaylar bu arsivle karsilastiriliyor. Ayrica **ayni calistirmadaki kardes
+olaylar** da karsilastiriliyor — bu, boluünmus tek bir arizayi yakalamakta
+degerli: bu veri setinde `session-service` bellek sizintisinin erken evresi
+(INC-005, `gc_pressure`) ve gec evresi (INC-003, `oom_risk`) ayri kartlara
+dustu ve motor bunlari %42 benzerlikle birbirine bagladi ("ayni ariza ailesi,
+ayni kok servis").
+
+**Olculen bir duzeltme.** Ilk surumde benzerlik salt servis kumesi
+ortusmesine de bakiyordu; bu veri setinde `order-service` ve `session-service`
+neredeyse her olaya dokundugu icin ag kesintisi ile bellek sizintisi "benzer"
+cikti. Bir **kok neden kapisi** eklendi: iki olay ayni kok neden tipini/
+ailesini ya da ayni kok servisi paylasmiyorsa benzerlik 0 dondurulur. Bu
+duzeltmeden sonra 8 sahte eslesme elendi, geriye anlamli olan tek cift kaldi.
+Kod: [src/similarity.py](src/similarity.py) · Ekran: [demo/03b-benzer-oruntuler.png](demo/03b-benzer-oruntuler.png)
+
+### 4.4 Izlenebilir aksiyon (opsiyonel gereksinim)
 Her kartin aksiyonu sahip + durum ile kayit altinda. Durum panodan
 `Acik -> Uzerinde calisiliyor -> Cozuldu` seklinde degistiriliyor; her gecis
 zaman damgasi ve sahiple `output/action_log.json` dosyasina yaziliyor ve sayfa
 yenilense de korunuyor.
-Kod: [src/action_store.py](src/action_store.py) · Ekran: [demo/05-aksiyon-takibi.png](demo/05-aksiyon-takibi.png)
+Kod: [src/action_store.py](src/action_store.py) · Ekran: [demo/07-aksiyon-takibi.png](demo/07-aksiyon-takibi.png)
 
-### 4.4 Denetlenebilir veri butunlugu
+### 4.5 Denetlenebilir veri butunlugu
 Pipeline her calistirmada `kart alarmlari + gurultu defteri == 3000` esitligini
 ve alarm kimliklerinin benzersizligini dogrular; tutmazsa **cikis kodu 1**
 verir. Panoda da ayri bir "Boru Hatti" sekmesinde gosterilir.
-Kod: [src/pipeline.py](src/pipeline.py) · Ekran: [demo/06-boru-hatti.png](demo/06-boru-hatti.png)
+Kod: [src/pipeline.py](src/pipeline.py) · Ekran: [demo/10-boru-hatti-butunluk.png](demo/10-boru-hatti-butunluk.png)
 
-### 4.5 Olculmus, sezgisel olmayan parametreler
+### 4.6 Olculmus, sezgisel olmayan parametreler
 Alarm tipi onselleri ve gurultu kurallari veri uzerinde yapilan zamansal
 dagilim olcumune dayaniyor (bkz. 2c). Her esik [src/config.py](src/config.py)
 icinde tek noktada ve **neden o deger oldugu yazili** olarak duruyor.
@@ -160,6 +195,7 @@ icinde tek noktada ve **neden o deger oldugu yazili** olarak duruyor.
 | 3 | [src/correlation.py](src/correlation.py) | Sure frenli union-find ile topolojik birlestirme |
 | 3 | [src/root_cause.py](src/root_cause.py) | 5 bilesenli puanlama, karsi hipotez, kanit, aksiyon |
 | 3 | [src/llm.py](src/llm.py) | Opsiyonel LLM zenginlestirmesi (karar vermez) |
+| 4 | [src/similarity.py](src/similarity.py) | Bilinen ariza oruntuleri + gecmis olay arsivi ve benzerlik |
 | 4 | [src/incident_cards.py](src/incident_cards.py) | JSON sema, oncelik formulu, kalite kapisi, 15 kart kapagi |
 | 4 | [src/pipeline.py](src/pipeline.py) | Uctan uca calistirici + butunluk dogrulamasi |
 | 5 | [src/action_store.py](src/action_store.py) | Aksiyon durum makinesi ve kalici gunluk |
@@ -170,6 +206,7 @@ icinde tek noktada ve **neden o deger oldugu yazili** olarak duruyor.
 - [output/noise_ledger.json](output/noise_ledger.json) — elenen 1.337 alarm, gerekceli
 - [output/action_log.json](output/action_log.json) — aksiyon durum gecisleri
 - [output/topology.json](output/topology.json) — grafik ve merkezilik degerleri
+- [output/incident_history.json](output/incident_history.json) — olay imza arsivi (calistirmalar arasi oruntu eslesmesi)
 
 ### Belgeler
 - [docs/plan.md](docs/plan.md) — faz plani

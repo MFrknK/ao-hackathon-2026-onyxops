@@ -1,7 +1,7 @@
 {
   "summary": {
-    "generated_at": "2026-09-16T16:23:09.769474",
-    "runtime_seconds": 0.08,
+    "generated_at": "2026-09-16T16:41:46.102472",
+    "runtime_seconds": 0.1,
     "total_alarms": 3000,
     "noise_alarms": 1337,
     "signal_alarms": 1663,
@@ -716,12 +716,12 @@
         "action": "ao-045-dns / dns-resolver: Arayuzun fiziksel baglantisini ve switch port durumunu kontrol edin; gerekirse yedek hatta gecin. (Etki: 14 servis, 543 alarm.)",
         "owner": "network-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -761,7 +761,51 @@
         "mobile-bff ve web-bff 2 dk arayla bozulmaya basladi; bagimlilik grafiginde 2 atlama mesafesinde (bagimlilik yakinligi).",
         "api-gateway ve billing-service 2 dk arayla bozulmaya basladi ve ayni fiziksel konumu paylasiyor (dc1/rack-B, dc2/rack-C) — ortak altyapi (mekansal yakinlik).",
         "dns-resolver ve report-batch 3 dk arayla bozulmaya basladi ve ayni fiziksel konumu paylasiyor (dc1/rack-A) — ortak altyapi (mekansal yakinlik)."
-      ]
+      ],
+      "similar_patterns": {
+        "known_patterns": [
+          {
+            "pattern_key": "rack-network-partition",
+            "name": "Kabin/omurga ag kesintisi",
+            "confidence": 0.933,
+            "description": "Tek bir fiziksel konumdaki (rack veya veri merkezi) ag baglantisi koptugunda, o kabindeki tum servisler es zamanli olarak erisilemez hale gelir. Bagimlilik grafiginde birbirine uzak servislerin ayni anda bozulmasi bu oruntunun ayirt edici isaretidir — neden mantiksal degil fizikseldir.",
+            "matched_root_type": "network_down",
+            "matched_symptoms": [
+              "conn_refused",
+              "http_5xx",
+              "latency_high",
+              "thread_pool",
+              "timeout"
+            ],
+            "symptom_share": 0.775,
+            "playbook": [
+              "Kabin ustu switch ve uplink port sayaclarini kontrol edin.",
+              "Etkilenen sunucularin tamaminin ayni kabin/DC'de olup olmadigini dogrulayin.",
+              "Yedek hatta gecisi (failover) tetikleyin, trafigi diger DC'ye kaydirin.",
+              "Fiziksel katman ekibini (kablo/SFP) devreye alin."
+            ],
+            "typical_resolution": "Yedek hatta gecis ile 5-15 dk, fiziksel onarim ile 1-4 saat."
+          }
+        ],
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-001",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T01:35:08",
+            "similarity": 1.0,
+            "root_cause": "dns-resolver/network_down",
+            "alarm_count": 543,
+            "why": [
+              "ayni kok neden tipi (`network_down`)",
+              "14 ortak servis (api-gateway, auth-service, billing-service, charging-service...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`dns-resolver`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
+      }
     },
     {
       "incident_id": "INC-002",
@@ -1200,12 +1244,12 @@
         "action": "ao-035-billing / billing-db: Diski acil bosaltin (log/temp temizligi), ardindan kalici kapasite artisi planlayin. (Etki: 7 servis, 321 alarm.)",
         "owner": "storage-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1230,7 +1274,50 @@
         "order-service ve session-service 1 dk arayla bozulmaya basladi; bagimlilik grafiginde 2 atlama mesafesinde (bagimlilik yakinligi).",
         "charging-service ve billing-db 2 dk arayla bozulmaya basladi; bagimlilik grafiginde 2 atlama mesafesinde (bagimlilik yakinligi).",
         "billing-service ve charging-service 2 dk arayla bozulmaya basladi; billing-service dogrudan charging-service servisine bagimli (bagimlilik yakinligi)."
-      ]
+      ],
+      "similar_patterns": {
+        "known_patterns": [
+          {
+            "pattern_key": "storage-exhaustion-cascade",
+            "name": "Disk dolmasi -> veritabani yazma kaskadi",
+            "confidence": 0.828,
+            "description": "Bir veritabani sunucusunun diski dolduğunda once yazma islemleri reddedilir, ardindan bu veritabanina yazan tum uygulama servislerinde islem hatalari ve zaman asimlari zinciri olusur. Kok neden depolama katmanindadir; uygulama alarmlarinin sayica cokluğu yaniltıcıdır.",
+            "matched_root_type": "disk_full",
+            "matched_symptoms": [
+              "db_write_fail",
+              "http_5xx",
+              "timeout",
+              "txn_fail"
+            ],
+            "symptom_share": 0.526,
+            "playbook": [
+              "Diski acil bosaltin: eski log, temp ve arsiv dosyalarini temizleyin.",
+              "Yazma trafigini gecici olarak kisin ya da kuyruga alin.",
+              "Dolmaya sebep olan dosya/tabloyu tespit edin (ani buyume var mi?).",
+              "Kalici kapasite artisi ve doluluk alarmi esigi revizyonu planlayin."
+            ],
+            "typical_resolution": "Acil bosaltma ile 10-30 dk; kalici cozum icin kapasite planlamasi."
+          }
+        ],
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-002",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T02:02:35",
+            "similarity": 1.0,
+            "root_cause": "billing-db/disk_full",
+            "alarm_count": 321,
+            "why": [
+              "ayni kok neden tipi (`disk_full`)",
+              "7 ortak servis (billing-db, billing-service, charging-service, invoice-batch...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`billing-db`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
+      }
     },
     {
       "incident_id": "INC-003",
@@ -1674,12 +1761,12 @@
         "action": "ao-014-session / session-service: Servisi kontrollu yeniden baslatin ve heap/bellek profilini alarak sizinti kaynagini bulun. (Etki: 6 servis, 330 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1703,7 +1790,78 @@
         "payment-service ve session-service 2 dk arayla bozulmaya basladi ve ayni fiziksel konumu paylasiyor (dc1/rack-B, dc2/rack-A, dc2/rack-C) — ortak altyapi (mekansal yakinlik).",
         "session-service ve mobile-bff 2 dk arayla bozulmaya basladi; mobile-bff dogrudan session-service servisine bagimli (bagimlilik yakinligi).",
         "web-bff ve web-bff 5 dk arayla bozulmaya basladi; ayni servis (bagimlilik yakinligi)."
-      ]
+      ],
+      "similar_patterns": {
+        "known_patterns": [
+          {
+            "pattern_key": "memory-leak-slow-burn",
+            "name": "Bellek sizintisi (yavas gelisen)",
+            "confidence": 0.845,
+            "description": "Bir serviste bellek kullanimi saatler icinde kademeli artar. Once cop toplama (GC) duraklamalari uzar ve gecikme yukselir, ardindan bellek tukenme riski alarmlari gelir. Keskin bir patlama uretmedigi icin klasik esik tabanli korelasyonun kacirdigi oruntudur; zaman icinde yayilan imzasiyla taninir.",
+            "matched_root_type": "oom_risk",
+            "matched_symptoms": [
+              "cpu_high",
+              "http_5xx",
+              "latency_high",
+              "timeout"
+            ],
+            "symptom_share": 0.585,
+            "playbook": [
+              "Servisi kontrollu sekilde ornek ornek yeniden baslatin (rolling restart).",
+              "Yeniden baslatmadan once heap dump alin — sizinti kaynagi icin sart.",
+              "Son dagitimi (deployment) gozden gecirin; sizinti genelde yeni kodla gelir.",
+              "GC parametrelerini ve heap boyutunu gecici olarak ayarlayin."
+            ],
+            "typical_resolution": "Yeniden baslatma ile aninda rahatlama; kalici cozum kod duzeltmesi."
+          }
+        ],
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T02:35:23",
+            "similarity": 1.0,
+            "root_cause": "session-service/oom_risk",
+            "alarm_count": 330,
+            "why": [
+              "ayni kok neden tipi (`oom_risk`)",
+              "6 ortak servis (mobile-bff, order-service, payment-provider-gw, payment-service...)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
+            "source": "ayni_calistirma",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T16:41:46",
+            "occurred_at": "2026-09-10T02:20:46",
+            "similarity": 0.416,
+            "root_cause": "session-service/gc_pressure",
+            "alarm_count": 18,
+            "why": [
+              "ayni ariza ailesi (`oom_risk` ~ `gc_pressure`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T02:20:46",
+            "similarity": 0.416,
+            "root_cause": "session-service/gc_pressure",
+            "alarm_count": 18,
+            "why": [
+              "ayni ariza ailesi (`oom_risk` ~ `gc_pressure`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
+      }
     },
     {
       "incident_id": "INC-004",
@@ -1924,12 +2082,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 3 servis, 124 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1948,7 +2106,47 @@
         "reconciliation-batch ve subscriber-service es zamanli bozulmaya basladi; bagimlilik grafiginde 2 atlama mesafesinde (bagimlilik yakinligi).",
         "subscriber-service ve subscriber-service 2 dk arayla bozulmaya basladi; ayni servis (bagimlilik yakinligi).",
         "subscriber-service ve subscriber-db es zamanli bozulmaya basladi; subscriber-service dogrudan subscriber-db servisine bagimli (bagimlilik yakinligi)."
-      ]
+      ],
+      "similar_patterns": {
+        "known_patterns": [
+          {
+            "pattern_key": "db-pool-exhaustion",
+            "name": "Veritabani baglanti havuzu tukenmesi",
+            "confidence": 0.662,
+            "description": "Baglanti havuzu dolar; yeni istekler baglanti bekler ve zaman asimina ugrar. Genellikle uzun suren sorgular, baglanti sizintisi veya ani yuk artisi tetikler. Veritabaninin kendisi ayakta oldugu icin 'DB saglikli' gorunur — yaniltici olan budur.",
+            "matched_root_type": "db_conn_pool",
+            "matched_symptoms": [
+              "latency_high"
+            ],
+            "symptom_share": 0.274,
+            "playbook": [
+              "Aktif baglantilari ve en uzun suren sorgulari listeleyin.",
+              "Kilitlenmis ya da asiri uzun sorgulari sonlandirin.",
+              "Havuz boyutunu gecici artirin; baglanti sizintisi olup olmadigini kontrol edin.",
+              "Ani yuk artisi varsa kaynagini (batch isi, kampanya) tespit edin."
+            ],
+            "typical_resolution": "Uzun sorgularin sonlandirilmasiyla 5-15 dk."
+          }
+        ],
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-004",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T03:05:40",
+            "similarity": 1.0,
+            "root_cause": "subscriber-db/db_conn_pool",
+            "alarm_count": 124,
+            "why": [
+              "ayni kok neden tipi (`db_conn_pool`)",
+              "3 ortak servis (reconciliation-batch, subscriber-db, subscriber-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`subscriber-db`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
+      }
     },
     {
       "incident_id": "INC-005",
@@ -2051,12 +2249,12 @@
         "action": "ao-013-session / session-service: GC duraklamalarini analiz edin, heap boyutu ve GC parametrelerini gozden gecirin. (Etki: 1 servis, 18 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2071,7 +2269,76 @@
         "score": 76.25,
         "reason": "02:20:46'de session-service servisinde 'gc_pressure' alarmi (ALM-00765, siddet 3) var ve puani kok nedene 0.0 puan yakin. session-service bagimsiz bir dalda; bu olayin aslinda iki ayri arizanin ust uste binmesi olma ihtimalini disarida birakmiyor. Dogrulama: ao-014-session uzerinde gc_pressure metriklerini 02:20 civari icin kontrol edin."
       },
-      "correlation_reasons": []
+      "correlation_reasons": [],
+      "similar_patterns": {
+        "known_patterns": [
+          {
+            "pattern_key": "memory-leak-slow-burn",
+            "name": "Bellek sizintisi (yavas gelisen)",
+            "confidence": 0.66,
+            "description": "Bir serviste bellek kullanimi saatler icinde kademeli artar. Once cop toplama (GC) duraklamalari uzar ve gecikme yukselir, ardindan bellek tukenme riski alarmlari gelir. Keskin bir patlama uretmedigi icin klasik esik tabanli korelasyonun kacirdigi oruntudur; zaman icinde yayilan imzasiyla taninir.",
+            "matched_root_type": "gc_pressure",
+            "matched_symptoms": [
+              "cpu_high",
+              "latency_high"
+            ],
+            "symptom_share": 0.167,
+            "playbook": [
+              "Servisi kontrollu sekilde ornek ornek yeniden baslatin (rolling restart).",
+              "Yeniden baslatmadan once heap dump alin — sizinti kaynagi icin sart.",
+              "Son dagitimi (deployment) gozden gecirin; sizinti genelde yeni kodla gelir.",
+              "GC parametrelerini ve heap boyutunu gecici olarak ayarlayin."
+            ],
+            "typical_resolution": "Yeniden baslatma ile aninda rahatlama; kalici cozum kod duzeltmesi."
+          }
+        ],
+        "similar_incidents": [
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-005",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T02:20:46",
+            "similarity": 1.0,
+            "root_cause": "session-service/gc_pressure",
+            "alarm_count": 18,
+            "why": [
+              "ayni kok neden tipi (`gc_pressure`)",
+              "1 ortak servis (session-service)",
+              "alarm tipi profili cok benzer (kosinus 1.00)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
+            "source": "ayni_calistirma",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T16:41:46",
+            "occurred_at": "2026-09-10T02:35:23",
+            "similarity": 0.416,
+            "root_cause": "session-service/oom_risk",
+            "alarm_count": 330,
+            "why": [
+              "ayni ariza ailesi (`gc_pressure` ~ `oom_risk`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
+          },
+          {
+            "source": "gecmis_arsiv",
+            "incident_id": "INC-003",
+            "run_id": "2026-09-16T16:32:04",
+            "occurred_at": "2026-09-10T02:35:23",
+            "similarity": 0.416,
+            "root_cause": "session-service/oom_risk",
+            "alarm_count": 330,
+            "why": [
+              "ayni ariza ailesi (`gc_pressure` ~ `oom_risk`)",
+              "1 ortak servis (session-service)",
+              "ayni kok servis (`session-service`)"
+            ]
+          }
+        ],
+        "history_runs_compared": 1
+      }
     },
     {
       "incident_id": "INC-UNCLUSTERED",
@@ -2539,12 +2806,12 @@
         "action": "Dusuk oncelikli artik sinyalleri toplu olarak gozden gecirin; tekrar eden bir oruntu varsa esikleri yeniden ayarlayin.",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:23:09.769474",
-        "updated_at": "2026-09-16T16:23:09.769474",
+        "created_at": "2026-09-16T16:41:46.102472",
+        "updated_at": "2026-09-16T16:41:46.102472",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:23:09.769474",
+            "at": "2026-09-16T16:41:46.102472",
             "note": "Toplayici kart otomatik olarak acildi."
           }
         ]

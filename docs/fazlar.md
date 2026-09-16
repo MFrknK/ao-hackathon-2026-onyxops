@@ -180,6 +180,17 @@ degistirildi.
   kullanilan AI araclari ve kutuphaneler.
 - [submission.json](../submission.json) — olculen tum sonuclar.
 
+### X-Factor 3. madde — benzer gecmis oruntuler
+
+Ilk teslimde bonus listesinin ucuncu maddesi ("benzer gecmis olay oruntulerini
+yakalayip kartin uzerine iliştirmek") atlanmisti; sonradan
+[src/similarity.py](../src/similarity.py) ile eklendi. Iki kaynak: alti adi
+konmus ariza oruntusunden olusan bir kutuphane (playbook'lariyla) ve
+calistirmalar arasi olay imza arsivi. Ilk surumde salt servis ortusmesi
+yaniltici eslesme uretince (ag kesintisi ~ bellek sizintisi) bir **kok neden
+kapisi** eklendi; 8 sahte eslesme elendi, anlamli olan tek cift kaldi
+(INC-003 oom_risk ~ INC-005 gc_pressure, ayni sizintinin iki evresi).
+
 ### Git gecmisi duzeltmesi
 
 Calisma sirasinda ortamda commit komutlari tekrar calistigi icin iki commit

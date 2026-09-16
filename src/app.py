@@ -253,6 +253,47 @@ with tab_board:
                     f"(puan {counter['score']:.1f})\n\n{counter['reason']}"
                 )
 
+            # ---- Benzer gecmis oruntuler (X-Factor) ----
+            sim = card.get("similar_patterns") or {}
+            patterns = sim.get("known_patterns") or []
+            neighbours = sim.get("similar_incidents") or []
+
+            if patterns or neighbours:
+                st.markdown("#### Benzer gecmis oruntuler")
+
+            for pattern in patterns:
+                st.success(
+                    f"**Bilinen ariza oruntusu: {pattern['name']}** "
+                    f"(uyum %{pattern['confidence'] * 100:.0f})\n\n"
+                    f"{pattern['description']}\n\n"
+                    f"Eslesen semptomlar: "
+                    + ", ".join(f"`{s}`" for s in pattern["matched_symptoms"])
+                )
+                with st.popover(f"Playbook — {pattern['name']}"):
+                    st.markdown("**Ilk mudahale adimlari**")
+                    for step, text in enumerate(pattern["playbook"], start=1):
+                        st.markdown(f"{step}. {text}")
+                    st.caption(f"Tipik cozum suresi: {pattern['typical_resolution']}")
+
+            if neighbours:
+                st.markdown(
+                    f"**Benzer olaylar** "
+                    f"({sim.get('history_runs_compared', 0)} gecmis calistirma tarandi)"
+                )
+                for match in neighbours:
+                    source = (
+                        "bu calistirma"
+                        if match["source"] == "ayni_calistirma"
+                        else f"gecmis calistirma · {match['run_id'][:16]}"
+                    )
+                    st.markdown(
+                        f"- **{match['incident_id']}** "
+                        f"(benzerlik %{match['similarity'] * 100:.0f}, {source}) — "
+                        f"kok neden `{match['root_cause']}`, "
+                        f"{match['alarm_count']} alarm. "
+                        + ("Gerekce: " + "; ".join(match["why"]) if match["why"] else "")
+                    )
+
             # ---- Korelasyon gerekceleri ----
             if card.get("correlation_reasons"):
                 with st.popover("Bu kumeler neden tek olay sayildi?"):

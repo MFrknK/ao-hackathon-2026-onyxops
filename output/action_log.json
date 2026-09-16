@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-16T16:19:17",
+  "updated_at": "2026-09-16T16:41:51",
   "actions": [
     {
       "incident_id": "INC-001",
@@ -8,7 +8,7 @@
       "owner": "network-oncall",
       "action": "ao-045-dns / dns-resolver: Arayuzun fiziksel baglantisini ve switch port durumunu kontrol edin; gerekirse yedek hatta gecin. (Etki: 14 servis, 543 alarm.)",
       "created_at": "2026-09-16T16:07:30.172217",
-      "updated_at": "2026-09-16T16:19:17",
+      "updated_at": "2026-09-16T16:36:22",
       "history": [
         {
           "status": "open",
@@ -19,7 +19,7 @@
         {
           "status": "in_progress",
           "previous_status": "open",
-          "at": "2026-09-16T16:19:17",
+          "at": "2026-09-16T16:36:22",
           "owner": "network-oncall",
           "note": "Acik -> Uzerinde calisiliyor"
         }

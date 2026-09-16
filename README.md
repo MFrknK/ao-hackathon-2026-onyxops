@@ -116,6 +116,15 @@ Ayrintili anlatim: [docs/mimari.md](docs/mimari.md)
 Her kartta 5 bilesenli puan kirilimi, veriden turetilmis kanit maddeleri ve
 farkli bir servisten gelen **karsi hipotez** yer alir.
 
+### Benzer gecmis oruntuler (X-Factor)
+![Benzer oruntuler](demo/03b-benzer-oruntuler.png)
+
+Her kart, alti bilinen ariza imzasindan biriyle eslestiginde **ilk mudahale
+playbook'u** ile birlikte etiketlenir. Ayrica gecmis calistirma arsivi ve ayni
+calistirmadaki kardes olaylar taranarak benzer olaylar karta iliştirilir —
+bu veri setinde `session-service` bellek sizintisinin erken (INC-005) ve gec
+(INC-003) evreleri birbirine baglandi.
+
 ### Gurultu denetimi (X-Factor)
 ![Gurultu denetimi](demo/05-gurultu-denetimi.png)
 
@@ -149,6 +158,7 @@ uretilebilir.
 | [output/noise_ledger.json](output/noise_ledger.json) | Elenen 1.337 alarm, kural ve gerekceyle |
 | [output/action_log.json](output/action_log.json) | Aksiyon durum gecisleri |
 | [output/topology.json](output/topology.json) | Bagimlilik grafigi ve merkezilik degerleri |
+| [output/incident_history.json](output/incident_history.json) | Olay imza arsivi — calistirmalar arasi oruntu eslesmesi |
 
 ---
 

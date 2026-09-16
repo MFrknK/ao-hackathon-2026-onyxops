@@ -84,15 +84,21 @@ def main() -> int:
         _scroll_main(page, 2050)
         _shot(page, "03-karsi-hipotez-aksiyon.png")
 
+        # --- 3b) Benzer gecmis oruntuler (X-Factor) --------------------
+        _scroll_main(page, 2700)
+        _shot(page, "03b-benzer-oruntuler.png")
+
         # --- 4) Aksiyonu canli degistir (izlenebilirlik kaniti) --------
         _scroll_main(page, 0)
-        select = page.locator("div[data-testid='stSelectbox']").first
         try:
-            select.click()
-            page.wait_for_timeout(600)
-            page.get_by_role("option", name="Uzerinde calisiliyor").first.click()
+            # Streamlit, `key` verilen bilesene `.st-key-<key>` sinifi ekler;
+            # sirasal secicilerden cok daha guvenilir.
+            page.locator(".st-key-status-INC-001").scroll_into_view_if_needed()
+            page.locator(".st-key-status-INC-001").click()
+            page.wait_for_timeout(800)
+            page.get_by_text("Uzerinde calisiliyor", exact=True).last.click()
             _settle(page, 1500)
-            page.get_by_role("button", name="Kaydet").first.click()
+            page.locator(".st-key-save-INC-001").click()
             _settle(page, 2500)
             print("  aksiyon durumu degistirildi: Acik -> Uzerinde calisiliyor")
         except Exception as exc:  # noqa: BLE001

@@ -26,6 +26,7 @@ from src.root_cause import (
     recommend_action,
     suggest_owner,
 )
+from src.similarity import append_history, attach_similar, build_signature
 from src.topology import DependencyGraph
 
 
@@ -143,7 +144,10 @@ def _title(incident: Incident) -> str:
 
 
 def build_card(
-    incident: Incident, graph: DependencyGraph, generated_at: datetime
+    incident: Incident,
+    graph: DependencyGraph,
+    generated_at: datetime,
+    similar: dict | None = None,
 ) -> dict:
     """Bir olayi zorunlu JSON semasina cevirir."""
     root = incident.root_cause
@@ -217,6 +221,13 @@ def build_card(
         }
 
     card["correlation_reasons"] = incident.merge_reasons
+
+    # X-Factor: bilinen ariza oruntusu + benzer gecmis olaylar.
+    card["similar_patterns"] = similar or {
+        "known_patterns": [],
+        "similar_incidents": [],
+        "history_runs_compared": 0,
+    }
     return card
 
 
@@ -354,6 +365,7 @@ def build_cards(
     residual: list[Alarm],
     graph: DependencyGraph,
     generated_at: datetime,
+    run_id: str = "",
 ) -> tuple[list[dict], dict]:
     """Olaylari kartlara cevirir; kalite kapisini ve 15 kart sinirini uygular."""
     ranked = rank_incidents(incidents)
@@ -379,14 +391,31 @@ def build_cards(
     for number, incident in enumerate(kept, start=1):
         incident.incident_id = f"INC-{number:03d}"
 
-    cards = [build_card(inc, graph, generated_at) for inc in kept]
+    # X-Factor: benzerlik **numaralandirmadan sonra** hesaplanir, aksi halde
+    # eslesmeler eski kimliklere isaret ederdi.
+    similar = attach_similar(kept, run_id or generated_at.isoformat(timespec="seconds"))
+
+    cards = [
+        build_card(inc, graph, generated_at, similar.get(inc.incident_id))
+        for inc in kept
+    ]
 
     bucket = build_unclustered_card(overflow, residual, generated_at)
     if bucket is not None:
         cards.append(bucket)
 
+    # Bu calistirmanin imzalarini arsive ekle ki sonraki calistirmalar
+    # "benzer gecmis olay" eslesmesi yapabilsin.
+    effective_run_id = run_id or generated_at.isoformat(timespec="seconds")
+    append_history(
+        [build_signature(inc, effective_run_id) for inc in kept], effective_run_id
+    )
+
     stats = {
         "incidents_detected": len(ranked),
+        "pattern_matches": sum(
+            1 for c in cards if (c.get("similar_patterns") or {}).get("known_patterns")
+        ),
         "incidents_passing_quality_gate": len(qualified),
         "incidents_below_quality_gate": len(rejected),
         "cards_with_own_slot": len(kept),

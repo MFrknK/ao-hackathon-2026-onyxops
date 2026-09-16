@@ -82,13 +82,22 @@ def run(verbose: bool = True) -> dict:
 
     # --- Faz 4: kartlar + 15 siniri --------------------------------------
     generated_at = datetime.now()
+    run_id = generated_at.isoformat(timespec="seconds")
     cards, stats = build_cards(
-        incidents, clustering.residual, data.graph, generated_at
+        incidents, clustering.residual, data.graph, generated_at, run_id=run_id
     )
     say(
         f"Faz 4  kart      : {stats['total_cards']} kart "
         f"(sinir {stats['cap']}), {stats['incidents_rolled_up']} olay + "
         f"{stats['residual_alarms']} artik alarm toplayici karta alindi"
+    )
+    matched = sum(
+        len((c.get("similar_patterns") or {}).get("similar_incidents", []))
+        for c in cards
+    )
+    say(
+        f"       oruntu    : {stats['pattern_matches']} kart bilinen ariza "
+        f"oruntusuyle eslesti, {matched} benzer olay baglantisi kuruldu"
     )
 
     # --- Butunluk dogrulamasi --------------------------------------------
