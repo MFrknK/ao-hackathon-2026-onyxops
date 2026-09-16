@@ -64,18 +64,65 @@ REQUIRED_FILES = [
 ]
 
 # --------------------------------------------------------------------------
+# Faz 2 — Servis taban orani (baseline) modeli
+# --------------------------------------------------------------------------
+#
+# Veri kesfi su gercegi ortaya koydu: her servis 2 saat boyunca kesintisiz
+# arka plan alarmi uretiyor (mobile-bff ~2.3 alarm/dk). Bu yuzden "yalniz mi"
+# testi tek basina hicbir seyi elemiyor. Bunun yerine her servisin kendi
+# taban oranini olcup, o oranin uzerine cikan **artis pencerelerini** (spike)
+# tespit ediyoruz. Gercek olaylar bu pencerelerin icinde yasiyor.
+
+BASELINE_BIN_MINUTES = 1          # zaman serisi cozunurlugu
+SPIKE_MERGE_GAP_MIN = 2           # bu kadar yakin artis pencereleri birlesir
+
+# Iki ayri duyarlikta artis dedektoru calistiriyoruz — plandaki "cift pencere"
+# tam olarak budur:
+#
+#   BURST  : dar pencere, yuksek esik. Ani patlamayi keskin sinirlarla keser.
+#   SLOW   : genis pencere, dusuk esik. Taban oranin biraz uzerinde saatlerce
+#            suren, keskin tepe yapmayan sinsi kotulesme dalgalarini yakalar.
+#
+# Ikisinin de disinda kalan dusuk/orta siddetli akis arka plan gurultusudur.
+
+BURST_DETECTOR = {
+    "rolling_minutes": 3,
+    "multiplier": 3.0,
+    "margin": 3.0,
+    "min_count": 6,
+}
+
+SLOW_DETECTOR = {
+    "rolling_minutes": 9,
+    "multiplier": 1.8,
+    "margin": 2.0,
+    "min_count": 9,
+}
+
+# --------------------------------------------------------------------------
 # Faz 2 — Gurultu filtresi
 # --------------------------------------------------------------------------
 
 # Bir dusuk-siddet alarminin "yalniz" olup olmadigina bakilan pencere.
 NOISE_LONELINESS_WINDOW_MIN = 30
 
-# Bu siddetin altindaki alarmlar gurultu adayi sayilir (1 = bilgi, 2 = uyari).
+# "Yalnizlik" testi icin siddet tavani (1 = bilgi, 2 = uyari).
 NOISE_MAX_SEVERITY = 2
 
-# Tek basina neredeyse her zaman bakim/bilgi niteligi tasiyan tipler.
-# Yalniz kaldiklarinda gurultu olarak isaretlenirler, kume icindeyken degil.
-CHRONIC_NOISE_TYPES = {
+# Hicbir artis penceresine dusmeyen alarmlar bu siddete kadar gurultu sayilir.
+# Siddet 4-5 kayitlar asla sessizce elenmez; kumelenemezlerse "Diger" kartina
+# artik olarak duserler. Kritik bir alarmi gurultu ilan etmek, onu kartsiz
+# birakmaktan daha buyuk hatadir.
+BACKGROUND_MAX_SEVERITY = 3
+
+# Kosulsuz bakim ciriltisi.
+#
+# Bu bes tipin zaman icindeki standart sapmasi 33-36 dk; 121 dakikalik
+# pencerede tam duzgun dagilimin beklenen degeri 121/sqrt(12) = 34.9. Yani
+# istatistiksel olarak olaylardan tamamen bagimsizlar. Mesaj icerikleri de
+# bunu dogruluyor: "Disk kullanimi yuzde 29 dolu" kaydi siddet 4 tasisa bile
+# bir olay degildir. Bu yuzden siddetten bagimsiz olarak elenirler.
+MAINTENANCE_CHATTER_TYPES = {
     "cert_expiry",
     "backup_warn",
     "ntp_drift",
@@ -96,18 +143,34 @@ SLOW_BURN_WINDOW_MIN = 20
 # Bir slow-burn kumesinin gecerli sayilmasi icin gereken minimum alarm sayisi.
 SLOW_BURN_MIN_ALARMS = 4
 
+# Slow-burn kumesi arka plan gurultusuyle karismasin diye siddet esigi.
+SLOW_BURN_MIN_SEVERITY = 3
+
+# Bir burst kumesinin gecerli sayilmasi icin gereken minimum alarm sayisi.
+BURST_MIN_ALARMS = 3
+
 # --------------------------------------------------------------------------
 # Faz 3 — Topolojik birlestirme
 # --------------------------------------------------------------------------
 
-# Iki kume arasinda kabul edilen maksimum zaman mesafesi (dakika).
-MERGE_TIME_GAP_MIN = 12
+# Birlestirme olcusu **baslangic ani yakinligi**dir, aralik ortusmesi degil.
+#
+# Neden: slow-burn kumeleri 20-40 dakikaya yayiliyor; "araliklari ortusuyor mu"
+# testi 2 saatlik pencerede neredeyse her kumeyi her kumeye baglayip hepsini
+# tek olaya cokertiyor. Oysa bir arizanin imzasi, bagimli servislerin
+# **birbiri ardina bozulmaya baslamasidir**. Bu yuzden kumelerin ilk alarm
+# anlari karsilastiriliyor.
+MERGE_ONSET_GAP_MIN = 6
 
 # Bagimlilik grafiginde kac atlamaya kadar "komsu" sayilir.
 MERGE_MAX_HOPS = 2
 
-# Ayni rack/DC uzerinden birlestirme icin daha dar bir zaman penceresi.
-MERGE_LOCALITY_GAP_MIN = 6
+# Ayni rack/DC uzerinden birlestirme icin daha dar bir baslangic penceresi.
+MERGE_LOCALITY_ONSET_GAP_MIN = 4
+
+# Gecisli birlesmenin freni: birlesme sonucu olusacak olay bu sureyi asiyorsa
+# birlestirme reddedilir. A~B ve B~C zincirinin tum geceyi yutmasini engeller.
+INCIDENT_MAX_SPAN_MIN = 30
 
 # --------------------------------------------------------------------------
 # Faz 3 — Kok neden puanlamasi
