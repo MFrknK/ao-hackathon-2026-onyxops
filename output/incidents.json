@@ -1,6 +1,6 @@
 {
   "summary": {
-    "generated_at": "2026-09-16T16:41:46.102472",
+    "generated_at": "2026-09-16T16:57:39.354477",
     "runtime_seconds": 0.1,
     "total_alarms": 3000,
     "noise_alarms": 1337,
@@ -37,10 +37,964 @@
       "all_alarm_ids_unique": true
     }
   },
+  "timeline": [
+    {
+      "minute": "2026-09-10T01:30:00",
+      "counts": {
+        "NOISE": 5,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T01:31:00",
+      "counts": {
+        "NOISE": 15,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T01:32:00",
+      "counts": {
+        "INC-UNCLUSTERED": 2,
+        "NOISE": 13
+      }
+    },
+    {
+      "minute": "2026-09-10T01:33:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T01:34:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:35:00",
+      "counts": {
+        "INC-UNCLUSTERED": 5,
+        "NOISE": 12,
+        "INC-001": 6
+      }
+    },
+    {
+      "minute": "2026-09-10T01:36:00",
+      "counts": {
+        "INC-001": 3,
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T01:37:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-001": 4,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T01:38:00",
+      "counts": {
+        "NOISE": 13,
+        "INC-001": 3,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:39:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-001": 3,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:40:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "INC-001": 2,
+        "NOISE": 7
+      }
+    },
+    {
+      "minute": "2026-09-10T01:41:00",
+      "counts": {
+        "NOISE": 4,
+        "INC-UNCLUSTERED": 2,
+        "INC-001": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T01:42:00",
+      "counts": {
+        "INC-001": 23,
+        "NOISE": 7,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:43:00",
+      "counts": {
+        "INC-001": 38,
+        "NOISE": 7,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:44:00",
+      "counts": {
+        "INC-001": 28,
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T01:45:00",
+      "counts": {
+        "INC-001": 63,
+        "INC-UNCLUSTERED": 5,
+        "NOISE": 11
+      }
+    },
+    {
+      "minute": "2026-09-10T01:46:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-001": 56,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:47:00",
+      "counts": {
+        "INC-001": 56,
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:48:00",
+      "counts": {
+        "INC-001": 56,
+        "NOISE": 10,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:49:00",
+      "counts": {
+        "INC-001": 58,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:50:00",
+      "counts": {
+        "INC-001": 38,
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:51:00",
+      "counts": {
+        "INC-001": 27,
+        "NOISE": 10
+      }
+    },
+    {
+      "minute": "2026-09-10T01:52:00",
+      "counts": {
+        "INC-001": 24,
+        "NOISE": 7
+      }
+    },
+    {
+      "minute": "2026-09-10T01:53:00",
+      "counts": {
+        "INC-001": 19,
+        "NOISE": 13,
+        "INC-UNCLUSTERED": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T01:54:00",
+      "counts": {
+        "INC-001": 7,
+        "NOISE": 14,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:55:00",
+      "counts": {
+        "NOISE": 6,
+        "INC-UNCLUSTERED": 1,
+        "INC-001": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T01:56:00",
+      "counts": {
+        "NOISE": 4,
+        "INC-001": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T01:57:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-001": 7,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:58:00",
+      "counts": {
+        "INC-001": 4,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T01:59:00",
+      "counts": {
+        "NOISE": 6,
+        "INC-UNCLUSTERED": 2,
+        "INC-001": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:00:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-001": 2,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:01:00",
+      "counts": {
+        "NOISE": 13,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:02:00",
+      "counts": {
+        "NOISE": 18,
+        "INC-001": 3,
+        "INC-UNCLUSTERED": 2,
+        "INC-002": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:03:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 2,
+        "INC-002": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:04:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 6,
+        "INC-002": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:05:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-002": 8,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:06:00",
+      "counts": {
+        "INC-002": 6,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:07:00",
+      "counts": {
+        "INC-002": 11,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T02:08:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-UNCLUSTERED": 4,
+        "INC-002": 10
+      }
+    },
+    {
+      "minute": "2026-09-10T02:09:00",
+      "counts": {
+        "INC-002": 15,
+        "NOISE": 14,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:10:00",
+      "counts": {
+        "INC-002": 15,
+        "NOISE": 11
+      }
+    },
+    {
+      "minute": "2026-09-10T02:11:00",
+      "counts": {
+        "INC-002": 23,
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:12:00",
+      "counts": {
+        "NOISE": 7,
+        "INC-002": 17,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:13:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-002": 19,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T02:14:00",
+      "counts": {
+        "INC-002": 19,
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:15:00",
+      "counts": {
+        "INC-002": 17,
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 8
+      }
+    },
+    {
+      "minute": "2026-09-10T02:16:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 5,
+        "INC-002": 14
+      }
+    },
+    {
+      "minute": "2026-09-10T02:17:00",
+      "counts": {
+        "INC-002": 19,
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:18:00",
+      "counts": {
+        "NOISE": 15,
+        "INC-002": 18,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:19:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 13,
+        "INC-002": 15
+      }
+    },
+    {
+      "minute": "2026-09-10T02:20:00",
+      "counts": {
+        "INC-002": 14,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 1,
+        "INC-005": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:21:00",
+      "counts": {
+        "INC-002": 16,
+        "NOISE": 11
+      }
+    },
+    {
+      "minute": "2026-09-10T02:22:00",
+      "counts": {
+        "INC-002": 15,
+        "NOISE": 11
+      }
+    },
+    {
+      "minute": "2026-09-10T02:23:00",
+      "counts": {
+        "INC-002": 16,
+        "NOISE": 5,
+        "INC-005": 1,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:24:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-002": 9,
+        "INC-005": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:25:00",
+      "counts": {
+        "INC-005": 3,
+        "NOISE": 14,
+        "INC-002": 7,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:26:00",
+      "counts": {
+        "INC-002": 5,
+        "NOISE": 16,
+        "INC-005": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:27:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 3,
+        "INC-002": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T02:28:00",
+      "counts": {
+        "INC-002": 4,
+        "INC-UNCLUSTERED": 2,
+        "NOISE": 9
+      }
+    },
+    {
+      "minute": "2026-09-10T02:29:00",
+      "counts": {
+        "NOISE": 7,
+        "INC-005": 3,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:30:00",
+      "counts": {
+        "INC-UNCLUSTERED": 9,
+        "INC-005": 2,
+        "NOISE": 10
+      }
+    },
+    {
+      "minute": "2026-09-10T02:31:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-UNCLUSTERED": 3,
+        "INC-002": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:32:00",
+      "counts": {
+        "NOISE": 16,
+        "INC-UNCLUSTERED": 6
+      }
+    },
+    {
+      "minute": "2026-09-10T02:33:00",
+      "counts": {
+        "INC-UNCLUSTERED": 11,
+        "NOISE": 15,
+        "INC-005": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:34:00",
+      "counts": {
+        "INC-UNCLUSTERED": 5,
+        "NOISE": 16,
+        "INC-005": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:35:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 9,
+        "INC-003": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:36:00",
+      "counts": {
+        "INC-UNCLUSTERED": 10,
+        "NOISE": 9
+      }
+    },
+    {
+      "minute": "2026-09-10T02:37:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 3,
+        "INC-003": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:38:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 14,
+        "INC-003": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T02:39:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 7,
+        "INC-003": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:40:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-003": 7,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:41:00",
+      "counts": {
+        "INC-003": 22,
+        "NOISE": 13,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:42:00",
+      "counts": {
+        "INC-003": 25,
+        "NOISE": 19,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:43:00",
+      "counts": {
+        "INC-003": 23,
+        "NOISE": 19
+      }
+    },
+    {
+      "minute": "2026-09-10T02:44:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-003": 16,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:45:00",
+      "counts": {
+        "INC-003": 20,
+        "NOISE": 19,
+        "INC-UNCLUSTERED": 8
+      }
+    },
+    {
+      "minute": "2026-09-10T02:46:00",
+      "counts": {
+        "NOISE": 7,
+        "INC-003": 13,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:47:00",
+      "counts": {
+        "INC-003": 19,
+        "NOISE": 9
+      }
+    },
+    {
+      "minute": "2026-09-10T02:48:00",
+      "counts": {
+        "INC-003": 22,
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T02:49:00",
+      "counts": {
+        "NOISE": 10,
+        "INC-003": 13,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T02:50:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-003": 16
+      }
+    },
+    {
+      "minute": "2026-09-10T02:51:00",
+      "counts": {
+        "NOISE": 10,
+        "INC-003": 17,
+        "INC-UNCLUSTERED": 7
+      }
+    },
+    {
+      "minute": "2026-09-10T02:52:00",
+      "counts": {
+        "INC-003": 18,
+        "INC-UNCLUSTERED": 2,
+        "NOISE": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:53:00",
+      "counts": {
+        "INC-003": 13,
+        "NOISE": 8,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:54:00",
+      "counts": {
+        "NOISE": 16,
+        "INC-UNCLUSTERED": 5,
+        "INC-003": 17
+      }
+    },
+    {
+      "minute": "2026-09-10T02:55:00",
+      "counts": {
+        "INC-003": 12,
+        "NOISE": 16,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T02:56:00",
+      "counts": {
+        "INC-003": 13,
+        "NOISE": 7,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T02:57:00",
+      "counts": {
+        "INC-003": 9,
+        "NOISE": 16,
+        "INC-UNCLUSTERED": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T02:58:00",
+      "counts": {
+        "INC-003": 8,
+        "NOISE": 5,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T02:59:00",
+      "counts": {
+        "NOISE": 15,
+        "INC-003": 6,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:00:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 17,
+        "INC-003": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:01:00",
+      "counts": {
+        "INC-003": 2,
+        "INC-UNCLUSTERED": 2,
+        "NOISE": 8
+      }
+    },
+    {
+      "minute": "2026-09-10T03:02:00",
+      "counts": {
+        "NOISE": 10,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:03:00",
+      "counts": {
+        "INC-UNCLUSTERED": 5,
+        "NOISE": 17
+      }
+    },
+    {
+      "minute": "2026-09-10T03:04:00",
+      "counts": {
+        "INC-UNCLUSTERED": 5,
+        "NOISE": 10,
+        "INC-003": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:05:00",
+      "counts": {
+        "NOISE": 9,
+        "INC-UNCLUSTERED": 5,
+        "INC-003": 1,
+        "INC-004": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:06:00",
+      "counts": {
+        "INC-UNCLUSTERED": 4,
+        "NOISE": 11,
+        "INC-004": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:07:00",
+      "counts": {
+        "NOISE": 10,
+        "INC-004": 2,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T03:08:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 10,
+        "INC-004": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:09:00",
+      "counts": {
+        "INC-004": 7,
+        "NOISE": 10,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:10:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 2,
+        "INC-004": 5
+      }
+    },
+    {
+      "minute": "2026-09-10T03:11:00",
+      "counts": {
+        "NOISE": 17,
+        "INC-004": 6,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:12:00",
+      "counts": {
+        "INC-004": 9,
+        "NOISE": 16,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:13:00",
+      "counts": {
+        "NOISE": 16,
+        "INC-004": 8,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:14:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-UNCLUSTERED": 1,
+        "INC-004": 6
+      }
+    },
+    {
+      "minute": "2026-09-10T03:15:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 7,
+        "INC-004": 6
+      }
+    },
+    {
+      "minute": "2026-09-10T03:16:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-004": 6,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:17:00",
+      "counts": {
+        "INC-004": 7,
+        "NOISE": 12,
+        "INC-UNCLUSTERED": 7
+      }
+    },
+    {
+      "minute": "2026-09-10T03:18:00",
+      "counts": {
+        "INC-004": 5,
+        "NOISE": 11,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:19:00",
+      "counts": {
+        "INC-004": 6,
+        "NOISE": 13,
+        "INC-UNCLUSTERED": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T03:20:00",
+      "counts": {
+        "INC-004": 9,
+        "NOISE": 8,
+        "INC-UNCLUSTERED": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:21:00",
+      "counts": {
+        "NOISE": 11,
+        "INC-004": 8,
+        "INC-UNCLUSTERED": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:22:00",
+      "counts": {
+        "INC-UNCLUSTERED": 3,
+        "NOISE": 5,
+        "INC-004": 6
+      }
+    },
+    {
+      "minute": "2026-09-10T03:23:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-UNCLUSTERED": 3,
+        "INC-004": 3
+      }
+    },
+    {
+      "minute": "2026-09-10T03:24:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-004": 7,
+        "INC-UNCLUSTERED": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:25:00",
+      "counts": {
+        "NOISE": 14,
+        "INC-004": 2
+      }
+    },
+    {
+      "minute": "2026-09-10T03:26:00",
+      "counts": {
+        "NOISE": 12,
+        "INC-004": 4
+      }
+    },
+    {
+      "minute": "2026-09-10T03:27:00",
+      "counts": {
+        "INC-004": 4,
+        "NOISE": 10
+      }
+    },
+    {
+      "minute": "2026-09-10T03:28:00",
+      "counts": {
+        "NOISE": 8,
+        "INC-UNCLUSTERED": 1,
+        "INC-004": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:29:00",
+      "counts": {
+        "NOISE": 16,
+        "INC-004": 1
+      }
+    },
+    {
+      "minute": "2026-09-10T03:30:00",
+      "counts": {
+        "NOISE": 7,
+        "INC-004": 1
+      }
+    }
+  ],
   "incidents": [
     {
       "incident_id": "INC-001",
       "title": "dns-resolver: Ag baglantisi koptu — 14 servise yayildi",
+      "display_title": "DNS Cozumleyici Ag Kesintisi",
+      "priority": "P1",
+      "priority_label": "P1 - Kritik",
       "status": "open",
       "priority_score": 0.9883,
       "priority_breakdown": {
@@ -716,12 +1670,12 @@
         "action": "ao-045-dns / dns-resolver: Arayuzun fiziksel baglantisini ve switch port durumunu kontrol edin; gerekirse yedek hatta gecin. (Etki: 14 servis, 543 alarm.)",
         "owner": "network-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -791,7 +1745,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-001",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T01:35:08",
             "similarity": 1.0,
             "root_cause": "dns-resolver/network_down",
@@ -810,6 +1764,9 @@
     {
       "incident_id": "INC-002",
       "title": "billing-db: Disk doldu — 7 servise yayildi",
+      "display_title": "Billing DB Disk Dolulugu",
+      "priority": "P1",
+      "priority_label": "P1 - Kritik",
       "status": "open",
       "priority_score": 0.7659,
       "priority_breakdown": {
@@ -1244,12 +2201,12 @@
         "action": "ao-035-billing / billing-db: Diski acil bosaltin (log/temp temizligi), ardindan kalici kapasite artisi planlayin. (Etki: 7 servis, 321 alarm.)",
         "owner": "storage-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1303,7 +2260,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-002",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T02:02:35",
             "similarity": 1.0,
             "root_cause": "billing-db/disk_full",
@@ -1322,6 +2279,9 @@
     {
       "incident_id": "INC-003",
       "title": "session-service: Bellek tukenme riski — 6 servise yayildi",
+      "display_title": "Session Servisi Bellek Sizintisi",
+      "priority": "P1",
+      "priority_label": "P1 - Kritik",
       "status": "open",
       "priority_score": 0.7462,
       "priority_breakdown": {
@@ -1761,12 +2721,12 @@
         "action": "ao-014-session / session-service: Servisi kontrollu yeniden baslatin ve heap/bellek profilini alarak sizinti kaynagini bulun. (Etki: 6 servis, 330 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -1819,7 +2779,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-003",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T02:35:23",
             "similarity": 1.0,
             "root_cause": "session-service/oom_risk",
@@ -1834,7 +2794,7 @@
           {
             "source": "ayni_calistirma",
             "incident_id": "INC-005",
-            "run_id": "2026-09-16T16:41:46",
+            "run_id": "2026-09-16T16:57:39",
             "occurred_at": "2026-09-10T02:20:46",
             "similarity": 0.416,
             "root_cause": "session-service/gc_pressure",
@@ -1848,7 +2808,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-005",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T02:20:46",
             "similarity": 0.416,
             "root_cause": "session-service/gc_pressure",
@@ -1866,6 +2826,9 @@
     {
       "incident_id": "INC-004",
       "title": "subscriber-db: Veritabani baglanti havuzu tukendi — 3 servise yayildi",
+      "display_title": "Abone DB Baglanti Havuzu Tukenmesi",
+      "priority": "P2",
+      "priority_label": "P2 - Yuksek",
       "status": "open",
       "priority_score": 0.4998,
       "priority_breakdown": {
@@ -2082,12 +3045,12 @@
         "action": "ao-031-subscriber / subscriber-db: Baglantı havuzu boyutunu ve sizintiyi kontrol edin; uzun suren sorgulari sonlandirin. (Etki: 3 servis, 124 alarm.)",
         "owner": "database-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2132,7 +3095,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-004",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T03:05:40",
             "similarity": 1.0,
             "root_cause": "subscriber-db/db_conn_pool",
@@ -2151,6 +3114,9 @@
     {
       "incident_id": "INC-005",
       "title": "session-service: Cop toplama baskisi — tek serviste sinirli",
+      "display_title": "Session Servisi Cop Toplama Baskisi",
+      "priority": "P2",
+      "priority_label": "P2 - Yuksek",
       "status": "open",
       "priority_score": 0.4332,
       "priority_breakdown": {
@@ -2249,12 +3215,12 @@
         "action": "ao-013-session / session-service: GC duraklamalarini analiz edin, heap boyutu ve GC parametrelerini gozden gecirin. (Etki: 1 servis, 18 alarm.)",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Olay karti otomatik olarak acildi."
           }
         ]
@@ -2296,7 +3262,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-005",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T02:20:46",
             "similarity": 1.0,
             "root_cause": "session-service/gc_pressure",
@@ -2311,7 +3277,7 @@
           {
             "source": "ayni_calistirma",
             "incident_id": "INC-003",
-            "run_id": "2026-09-16T16:41:46",
+            "run_id": "2026-09-16T16:57:39",
             "occurred_at": "2026-09-10T02:35:23",
             "similarity": 0.416,
             "root_cause": "session-service/oom_risk",
@@ -2325,7 +3291,7 @@
           {
             "source": "gecmis_arsiv",
             "incident_id": "INC-003",
-            "run_id": "2026-09-16T16:32:04",
+            "run_id": "2026-09-16T16:53:51",
             "occurred_at": "2026-09-10T02:35:23",
             "similarity": 0.416,
             "root_cause": "session-service/oom_risk",
@@ -2343,6 +3309,9 @@
     {
       "incident_id": "INC-UNCLUSTERED",
       "title": "Diger / Kumelenmemis — 327 alarm, 23 servis",
+      "display_title": "Diger / Kumelenmemis",
+      "priority": "P4",
+      "priority_label": "P4 - Dusuk",
       "status": "open",
       "priority_score": 0.0,
       "priority_breakdown": {},
@@ -2806,12 +3775,12 @@
         "action": "Dusuk oncelikli artik sinyalleri toplu olarak gozden gecirin; tekrar eden bir oruntu varsa esikleri yeniden ayarlayin.",
         "owner": "platform-oncall",
         "status": "open",
-        "created_at": "2026-09-16T16:41:46.102472",
-        "updated_at": "2026-09-16T16:41:46.102472",
+        "created_at": "2026-09-16T16:57:39.354477",
+        "updated_at": "2026-09-16T16:57:39.354477",
         "history": [
           {
             "status": "open",
-            "at": "2026-09-16T16:41:46.102472",
+            "at": "2026-09-16T16:57:39.354477",
             "note": "Toplayici kart otomatik olarak acildi."
           }
         ]

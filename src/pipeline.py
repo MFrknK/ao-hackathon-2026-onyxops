@@ -28,6 +28,32 @@ from src.noise_filter import filter_noise
 from src.root_cause import analyse_all, evidence_for
 
 
+def _build_timeline(alarms, cards, noise) -> list[dict]:
+    """Dakika bazli yigilmis zaman serisi — panodaki ana grafigin kaynagi.
+
+    Her dakika icin: arka plan gurultusu + her olay kartinin o dakikadaki
+    alarm sayisi. Bu sayede nobetci muhendis, alarm selinin hangi bolumunun
+    hangi olaya ait oldugunu tek bakista gorur.
+    """
+    owner: dict[str, str] = {}
+    for card in cards:
+        for alarm_id in card["alarm_ids"]:
+            owner[alarm_id] = card["incident_id"]
+    for entry in noise.ledger:
+        owner[entry.alarm.alarm_id] = "NOISE"
+
+    buckets: dict[str, dict[str, int]] = {}
+    for alarm in alarms:
+        minute = alarm.timestamp.replace(second=0, microsecond=0).isoformat()
+        key = owner.get(alarm.alarm_id, "NOISE")
+        row = buckets.setdefault(minute, {})
+        row[key] = row.get(key, 0) + 1
+
+    return [
+        {"minute": minute, "counts": buckets[minute]} for minute in sorted(buckets)
+    ]
+
+
 def run(verbose: bool = True) -> dict:
     """Tum boru hattini calistirir ve sonucu sozluk olarak dondurur."""
     started = datetime.now()
@@ -139,7 +165,11 @@ def run(verbose: bool = True) -> dict:
         },
     }
 
-    payload = {"summary": summary, "incidents": cards}
+    payload = {
+        "summary": summary,
+        "timeline": _build_timeline(data.alarms, cards, noise),
+        "incidents": cards,
+    }
 
     ledger_payload = {
         "generated_at": generated_at.isoformat(),

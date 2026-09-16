@@ -116,14 +116,14 @@ tasiyor: farkli bir servisten en yuksek puanli alternatif, puan farki ve
 "neden hala masada" gerekcesiyle. Ayni servisten ikinci bir alarm alternatif
 sayilmaz — karsi hipotezin degeri operatore *baska bir yere* bakmayi
 onermesindedir.
-Kod: [src/root_cause.py](src/root_cause.py) · Ekran: [demo/03-karsi-hipotez-aksiyon.png](demo/03-karsi-hipotez-aksiyon.png)
+Kod: [src/root_cause.py](src/root_cause.py) · Ekran: [demo/03-olay-kartlari.png](demo/03-olay-kartlari.png)
 
 ### 4.2 Gurultu denetim gorunumu
 Elenen 1.337 alarmin **tamami** silinmeden, hangi kuralla ve neden elendigi
 yazili olarak Gurultu Defteri'nde. Panoda kural/siddet/servis/metin filtresiyle
 denetlenebiliyor.
 Kod: [src/noise_filter.py](src/noise_filter.py) · Cikti: [output/noise_ledger.json](output/noise_ledger.json)
-· Ekran: [demo/05-gurultu-denetimi.png](demo/05-gurultu-denetimi.png)
+· Ekran: [demo/06-denetim-gorunumu.png](demo/06-denetim-gorunumu.png)
 
 ### 4.3 Benzer gecmis olay oruntuleri
 Her kart iki kaynaktan gelen oruntu eslesmesi tasiyor:
@@ -157,14 +157,14 @@ neredeyse her olaya dokundugu icin ag kesintisi ile bellek sizintisi "benzer"
 cikti. Bir **kok neden kapisi** eklendi: iki olay ayni kok neden tipini/
 ailesini ya da ayni kok servisi paylasmiyorsa benzerlik 0 dondurulur. Bu
 duzeltmeden sonra 8 sahte eslesme elendi, geriye anlamli olan tek cift kaldi.
-Kod: [src/similarity.py](src/similarity.py) · Ekran: [demo/03b-benzer-oruntuler.png](demo/03b-benzer-oruntuler.png)
+Kod: [src/similarity.py](src/similarity.py) · Ekran: [demo/04-kart-ayrinti-kanit-oruntu.png](demo/04-kart-ayrinti-kanit-oruntu.png)
 
 ### 4.4 Izlenebilir aksiyon (opsiyonel gereksinim)
 Her kartin aksiyonu sahip + durum ile kayit altinda. Durum panodan
 `Acik -> Uzerinde calisiliyor -> Cozuldu` seklinde degistiriliyor; her gecis
 zaman damgasi ve sahiple `output/action_log.json` dosyasina yaziliyor ve sayfa
 yenilense de korunuyor.
-Kod: [src/action_store.py](src/action_store.py) · Ekran: [demo/07-aksiyon-takibi.png](demo/07-aksiyon-takibi.png)
+Kod: [src/action_store.py](src/action_store.py) · Ekran: [demo/05-aksiyon-durum-degisti.png](demo/05-aksiyon-durum-degisti.png)
 
 ### 4.5 Denetlenebilir veri butunlugu
 Pipeline her calistirmada `kart alarmlari + gurultu defteri == 3000` esitligini

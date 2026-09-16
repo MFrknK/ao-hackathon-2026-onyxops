@@ -137,15 +137,14 @@
     "playwright (yalnizca demo ekran goruntuleri)"
   ],
   "screenshots": [
-    "demo/01-olay-panosu.png",
-    "demo/02-kok-neden-kanit.png",
-    "demo/03-karsi-hipotez-aksiyon.png",
-    "demo/03b-benzer-oruntuler.png",
-    "demo/04-aksiyon-durum-degisti.png",
-    "demo/05-gurultu-denetimi.png",
-    "demo/06-gurultu-defteri-tablo.png",
-    "demo/07-aksiyon-takibi.png",
-    "demo/08-durum-gecis-gunlugu.png",
+    "demo/01-ana-pano.png",
+    "demo/02-ana-pano-tam.png",
+    "demo/03-olay-kartlari.png",
+    "demo/04-kart-ayrinti-kanit-oruntu.png",
+    "demo/05-aksiyon-durum-degisti.png",
+    "demo/06-denetim-gorunumu.png",
+    "demo/07-gurultu-defteri-tablo.png",
+    "demo/08-siniflandirilamayanlar.png",
     "demo/09-topoloji.png",
     "demo/10-boru-hatti-butunluk.png"
   ],

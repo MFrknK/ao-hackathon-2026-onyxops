@@ -106,6 +106,79 @@ def _time_range(start: datetime, end: datetime) -> dict:
     }
 
 
+def priority_label(incident: Incident) -> tuple[str, str]:
+    """Oncelik puanindan operator dilinde P1/P2/P3 etiketi uretir."""
+    score = incident.priority_score
+    if score >= 0.70 or incident.max_severity >= 5 and len(incident.services) >= 5:
+        return "P1", "Kritik"
+    if score >= 0.40 or incident.max_severity >= 4:
+        return "P2", "Yuksek"
+    return "P3", "Orta"
+
+
+# Kok neden servisi + alarm tipinden okunakli bir olay basligi uretmek icin
+# kullanilan kisa sozluk. Operator "dns-resolver/network_down" degil,
+# "DC1 Rack-A Ag Kesintisi" gormek ister.
+_SERVICE_LABEL = {
+    "dns-resolver": "DNS Cozumleyici",
+    "billing-db": "Billing DB",
+    "subscriber-db": "Abone DB",
+    "session-service": "Session Servisi",
+    "payment-provider-gw": "Dis Odeme Saglayicisi",
+    "batch-scheduler": "Toplu Is Zamanlayici",
+    "api-gateway": "API Gateway",
+    "cache-cluster": "Cache Kumesi",
+    "message-queue": "Mesaj Kuyrugu",
+    "load-balancer": "Yuk Dengeleyici",
+}
+
+_EVENT_LABEL = {
+    "network_down": "Ag Kesintisi",
+    "network_flap": "Ag Linki Kararsizligi",
+    "pkt_loss": "Paket Kaybi",
+    "disk_full": "Disk Dolulugu",
+    "db_write_fail": "Veritabani Yazma Hatasi",
+    "db_conn_pool": "Baglanti Havuzu Tukenmesi",
+    "oom_risk": "Bellek Sizintisi",
+    "gc_pressure": "Cop Toplama Baskisi",
+    "mem_high": "Yuksek Bellek Kullanimi",
+    "cpu_high": "Yuksek CPU Kullanimi",
+    "thread_pool": "Is Parcacigi Havuzu Doygunlugu",
+    "ext_unreach": "Dis Servis Erisilemezligi",
+    "ext_slow": "Dis Servis Yavasligi",
+    "batch_overlap": "Toplu Islem (Batch) Cakismasi",
+    "batch_slow": "Toplu Is Gecikmesi",
+    "conn_refused": "Baglanti Reddi",
+    "http_5xx": "Yuksek Hata Orani",
+    "latency_high": "Yuksek Gecikme",
+    "timeout": "Bagimlilik Zaman Asimi",
+    "txn_fail": "Islem Hatalari",
+    "queue_backlog": "Kuyruk Birikimi",
+}
+
+
+def display_title(incident: Incident) -> str:
+    """Panoda gosterilen kisa, operator diliyle yazilmis olay basligi."""
+    root = incident.root_cause
+    if root is None:
+        return "Diger / Kumelenmemis"
+
+    event = _EVENT_LABEL.get(root.alarm_type, root.alarm_type)
+    service = _SERVICE_LABEL.get(root.service, root.service)
+
+    # Olay tek bir fiziksel konumda toplanmissa konumu basliga tasi —
+    # "DC1 Rack-A Ag Kesintisi" operatore servis adindan daha cok sey soyler.
+    if len(incident.locations) == 1 and root.alarm_type in {
+        "network_down",
+        "pkt_loss",
+        "network_flap",
+    }:
+        dc, _, rack = incident.locations[0].partition("/")
+        return f"{dc.upper()} {rack.replace('rack-', 'Rack-')} {event}"
+
+    return f"{service} {event}"
+
+
 def _title(incident: Incident) -> str:
     root = incident.root_cause
     if root is None:
@@ -153,9 +226,14 @@ def build_card(
     root = incident.root_cause
     counter = incident.counter_hypothesis
 
+    priority_code, priority_text = priority_label(incident)
+
     card: dict = {
         "incident_id": incident.incident_id,
         "title": _title(incident),
+        "display_title": display_title(incident),
+        "priority": priority_code,
+        "priority_label": f"{priority_code} - {priority_text}",
         "status": "open",
         "priority_score": round(incident.priority_score, 4),
         "priority_breakdown": incident.priority_breakdown,
@@ -278,6 +356,9 @@ def build_unclustered_card(
     return {
         "incident_id": "INC-UNCLUSTERED",
         "title": f"Diger / Kumelenmemis — {len(alarms)} alarm, {len(services)} servis",
+        "display_title": "Diger / Kumelenmemis",
+        "priority": "P4",
+        "priority_label": "P4 - Dusuk",
         "status": "open",
         "priority_score": 0.0,
         "priority_breakdown": {},

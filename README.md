@@ -6,7 +6,7 @@
 > neden hipotezini, kanitlarini, karsi hipotezini ve izlenebilir bir aksiyonu
 > icerir. **Veri kaybi sifir.**
 
-![Olay Panosu](demo/01-olay-panosu.png)
+![Olay Panosu](demo/01-ana-pano.png)
 
 ---
 
@@ -73,7 +73,7 @@ data/  alarms.csv · service_dependencies.csv · host_inventory.csv
   ├─ Faz 2  Gurultu filtresi (3 kural) -> cift duyarlikli artis dedektoru -> kumeleme
   ├─ Faz 3  Sure frenli union-find ile olay birlestirme -> 5 bilesenli kok neden puani
   ├─ Faz 4  JSON kart semasi + oncelik + kalite kapisi + 15 kart kapagi
-  └─ Faz 5  Streamlit panosu (5 sekme)
+  └─ Faz 5  Streamlit NOC panosu: ozet serit + zaman serisi + 5 sekme
 ```
 
 ### Uc kritik tasarim karari
@@ -111,13 +111,13 @@ Ayrintili anlatim: [docs/mimari.md](docs/mimari.md)
 ## Ekran goruntuleri
 
 ### Olay karti — kok neden, kanit, karsi hipotez
-![Kok neden ve karsi hipotez](demo/03-karsi-hipotez-aksiyon.png)
+![Kok neden ve karsi hipotez](demo/03-olay-kartlari.png)
 
 Her kartta 5 bilesenli puan kirilimi, veriden turetilmis kanit maddeleri ve
 farkli bir servisten gelen **karsi hipotez** yer alir.
 
 ### Benzer gecmis oruntuler (X-Factor)
-![Benzer oruntuler](demo/03b-benzer-oruntuler.png)
+![Benzer oruntuler](demo/04-kart-ayrinti-kanit-oruntu.png)
 
 Her kart, alti bilinen ariza imzasindan biriyle eslestiginde **ilk mudahale
 playbook'u** ile birlikte etiketlenir. Ayrica gecmis calistirma arsivi ve ayni
@@ -126,13 +126,19 @@ bu veri setinde `session-service` bellek sizintisinin erken (INC-005) ve gec
 (INC-003) evreleri birbirine baglandi.
 
 ### Gurultu denetimi (X-Factor)
-![Gurultu denetimi](demo/05-gurultu-denetimi.png)
+![Gurultu denetimi](demo/06-denetim-gorunumu.png)
 
 Elenen 1.337 alarmin tamami, hangi kuralla ve **neden** elendigi yazili olarak
 denetlenebilir. Hicbir alarm silinmez.
 
+### Siniflandirilamayanlar
+![Siniflandirilamayanlar](demo/08-siniflandirilamayanlar.png)
+
+Gurultu esigini gecen ama kendi kartini hak edecek kanita ulasamayan 327
+alarm burada tam listeyle durur — silinmez.
+
 ### Aksiyon takibi
-![Aksiyon takibi](demo/07-aksiyon-takibi.png)
+![Aksiyon takibi](demo/05-aksiyon-durum-degisti.png)
 
 Her kartin aksiyonu sahip + durum ile kayitli. `Acik -> Uzerinde calisiliyor ->
 Cozuldu` gecisleri zaman damgasiyla `output/action_log.json` dosyasina yazilir

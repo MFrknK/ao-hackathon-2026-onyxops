@@ -1,0 +1,16 @@
+# OnyxOps operator panosu — koyu NOC temasi.
+# Nobetci muhendis gece vardiyasinda calisiyor; pano koyu zeminli.
+
+[theme]
+base = "dark"
+primaryColor = "#f2b705"
+backgroundColor = "#0b1220"
+secondaryBackgroundColor = "#121c2e"
+textColor = "#e6ecf5"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
