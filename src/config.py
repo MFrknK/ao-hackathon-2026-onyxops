@@ -185,41 +185,57 @@ SCORE_WEIGHTS = {
 }
 
 # Alarm tipi egilimi: 1.0 = guclu neden adayi, 0.0 = saf semptom.
+#
+# Bu degerler sezgiyle degil, **veriden olculerek** kalibre edildi. Her alarm
+# tipinin zaman ekseni uzerindeki standart sapmasi hesaplandi. 121 dakikalik
+# gozlem penceresinde tam duzgun (olayla iliskisiz) dagilimin beklenen std
+# degeri 121/sqrt(12) = 34.9'dur. Olcum:
+#
+#   Zamanda SIKISMIS (= olay imzasi)      Zamanda DUZGUN (= arka plan)
+#   -----------------------------------   ---------------------------------
+#   batch_overlap  0.5   network_down 0.8  txn_fail      16.8  timeout    28.0
+#   pkt_loss       0.8   ext_unreach  0.9  http_5xx      28.2  db_conn_pool 30.1
+#   ext_slow       1.0   disk_full    1.5  network_flap  32.9  ntp_drift  33.2
+#   thread_pool    2.2   conn_refused 2.6  latency_high  33.7  log_rotate 34.4
+#   oom_risk       4.9   batch_slow   4.9  mem_high      35.9  cpu_high   36.5
+#   db_write_fail  6.7   gc_pressure  7.7  disk_warn     36.2
+#
+# Ilk kalibrasyonda `network_flap` 0.85 onseline sahipti ve buyuk olayda kok
+# neden olarak secildi. Oysa olcum bu tipin std'sinin 32.9 oldugunu, yani
+# duzgun dagilmis arka plan oldugunu gosteriyor: 202 alarmi iki saate yayilmis
+# durumda. `mem_high` ve `cpu_high` icin de ayni durum gecerli. Bu tiplerin
+# onseli dusuruldu; gercek kok neden sinyali olan network_down / pkt_loss /
+# disk_full / ext_unreach one cikarildi.
 ALARM_TYPE_PRIOR = {
-    # Altyapi / ag katmani — genellikle kok neden
-    "network_down": 1.00,
-    "network_flap": 0.85,
-    "pkt_loss": 0.75,
-    # Depolama
-    "disk_full": 0.90,
-    "disk_warn": 0.45,
-    # Veritabani
-    "db_write_fail": 0.95,
-    "db_conn_pool": 0.70,
-    # Bellek / calisma zamani
-    "oom_risk": 0.80,
-    "mem_high": 0.60,
-    "gc_pressure": 0.55,
-    "cpu_high": 0.55,
-    "thread_pool": 0.50,
-    # Dis bagimliliklar
-    "ext_unreach": 0.85,
-    "ext_slow": 0.60,
-    # Toplu isler
-    "batch_overlap": 0.75,
-    "batch_slow": 0.50,
-    # Bakim / bilgi
-    "cert_expiry": 0.30,
-    "backup_warn": 0.25,
-    "ntp_drift": 0.25,
-    "log_rotate": 0.15,
-    # Semptomlar — bagimli servislerde gorulur
-    "conn_refused": 0.40,
-    "queue_backlog": 0.35,
-    "txn_fail": 0.30,
-    "http_5xx": 0.25,
-    "latency_high": 0.15,
-    "timeout": 0.10,
+    # --- Zamanda sikismis: guclu kok neden adaylari ---
+    "network_down": 1.00,   # std 0.8  — 12 alarm, 3 dakikaya sikismis
+    "disk_full": 0.95,      # std 1.5  — tek serviste, 5 dakika
+    "db_write_fail": 0.95,  # std 6.7
+    "ext_unreach": 0.90,    # std 0.9
+    "batch_overlap": 0.85,  # std 0.5  — en keskin imza
+    "pkt_loss": 0.80,       # std 0.8
+    "oom_risk": 0.80,       # std 4.9
+    "ext_slow": 0.70,       # std 1.0
+    "conn_refused": 0.60,   # std 2.6  — hem neden hem semptom olabilir
+    "gc_pressure": 0.55,    # std 7.7  — oom_risk'in oncusu
+    "batch_slow": 0.50,     # std 4.9  — genelde batch_overlap'in sonucu
+    "thread_pool": 0.45,    # std 2.2  — yavas bagimliligin turevi
+    "db_conn_pool": 0.45,   # std 30.1 — sinirda; olay icinde anlamli
+    # --- Zamanda duzgun dagilmis: arka plan / semptom ---
+    "txn_fail": 0.30,       # std 16.8 — is katmani semptomu
+    "queue_backlog": 0.30,
+    "network_flap": 0.20,   # std 32.9 — 202 alarm, 2 saate yayilmis gurultu
+    "mem_high": 0.20,       # std 35.9
+    "cpu_high": 0.20,       # std 36.5
+    "http_5xx": 0.15,       # std 28.2 — saf semptom
+    "latency_high": 0.10,   # std 33.7
+    "timeout": 0.10,        # std 28.0 — tanim geregi bagimlilik semptomu
+    # --- Bakim ciriltisi (zaten Faz 2'de eleniyor) ---
+    "disk_warn": 0.10,
+    "cert_expiry": 0.05,
+    "backup_warn": 0.05,
+    "ntp_drift": 0.05,
+    "log_rotate": 0.05,
 }
 
 DEFAULT_TYPE_PRIOR = 0.35
